@@ -201,6 +201,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -308,7 +318,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-03T09:41:03+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-03T10:54:26+08:00">
                 2020-07-03
               </time>
             
@@ -351,128 +361,24 @@
             <ul>
 <li><strong>Authors:</strong>     George Papandreou, Liang-Chieh Chen, Kevin Murphy，Alan L. Yuille</li>
 <li><strong>Publish:</strong>       ICCV 2015</li>
-<li><strong>link：</strong><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Papandreou_Weakly-_and_Semi-Supervised_ICCV_2015_paper.pdf" target="_blank" rel="noopener">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Papandreou_Weakly-_and_Semi-Supervised_ICCV_2015_paper.pdf</a></li>
+<li><strong><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Papandreou_Weakly-_and_Semi-Supervised_ICCV_2015_paper.pdf" target="_blank" rel="noopener">Link</a></strong></li>
 </ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2>
-          
-        
-      
-    </div>
-    
-    
-    
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p>
+<p>答：（1）弱注释来训练数据（例如从边界框或图像级别标签来训练出分割的像素级类别）。</p>
+<p>​        （2）从一个或者多个数据集的少量强标注图像和许多弱标注图像进行组合。</p>
+<p>从这两方来解决学习DCNN用于语义分割的问题。</p>
+<p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p>
+<p>答：在弱监督或者半监督的环境下，使用期望最大化（EM）训练DeepLab+CRF。</p>
+<p><strong>3.作者给出的答案是什么？</strong></p>
+<p>答：在PASCAL VOC 2012图像分割的基准上，得到了有竞争力的结果，并且明显的减少了标注的工作量。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>​        语义图像分割是指给图像中的<strong>每个像素</strong>分配一个语义标签（如“人”、“车”或“狗”）。根据具有挑战性的Pascal VOC 2012分割基准测试的结果，性能最好的方法都使用某种<strong>深度卷积神经网络</strong>（DCNN）。本文使用的是<strong>DeepLab CRF方法</strong>，这个在VOC2012中mIOU为70%的模型。</p>
+<p>​        DCNN的方法瓶颈是通常需要强标注信息，但是强标注信息工作量大，为此，我们使用更容易获取的弱监督标签来训练DCNN模型。</p>
+<p>​        使用的数据形式的Image-level标签，这种形式主要是指定是否存在某个类别，而不是像素的位置，弱监督学习大多采用的是多实例学习（MIL）的方法。但是目前来说，弱监督学习的效果仍然大大落后于强监督。</p>
+<p>​        本文开发一种期望最大化（EM）方法用于从弱注释数据中训练DCNN模型。所提出的算法在估计潜在像素标签（受弱注释约束）和使用随机梯度下降（SGD）优化DCNN参数之间交替。该算法在获取少量强（像素级）注释图像和大量弱（边界框或图像级）注释图像的情况下，几乎可以与全监督系统的性能相匹配。</p>
+<p>​        本文主要贡献：1.提出了一种基于image-level或边界框标注的EM算法，适用于弱监督和半监督环境。2.结果表明，该方法在将少量像素级标注图像与大量图像级或边界框标注图像相结合时取得了很好的效果，几乎与所有训练图像都有像素级标注的结果相匹配。3.我们展示了在数据集中结合弱注释或强注释可以得到进一步的改进.特别是，通过结合来自PASCAL和MS-COCO数据集的注释，我们在PASCAL VOC 2012上的IOU性能达到73.9%。</p>
+<h2 id="Methods"><a href="#Methods" class="headerlink" title="Methods"></a>Methods</h2><h4 id="1-Pixel-level-annotations"><a href="#1-Pixel-level-annotations" class="headerlink" title="1. Pixel-level annotations"></a>1. Pixel-level annotations</h4><p><img src="/.com//1.JPG" alt="1"></p>
+<p>此过程目标函数为：</p>
 
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/02/test-my-site/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="HongJianYuan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/aa.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="您好！">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/07/02/test-my-site/" itemprop="url">test_my_site</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-02T13:54:51+08:00">
-                2020-07-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
           
         
       
@@ -557,7 +463,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
