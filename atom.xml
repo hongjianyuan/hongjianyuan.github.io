@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-07-02T05:54:51.475Z</updated>
+  <updated>2020-07-03T01:45:27.402Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Weakly- and Semi-Supervised Learning of a DCNN for Semantic Image Segmentation</title>
+    <link href="http://yoursite.com/2020/07/03/Weakly-and-Semi-Supervised-Learning-of-a-DCNN-for-Semantic-Image-Segmentation/"/>
+    <id>http://yoursite.com/2020/07/03/Weakly-and-Semi-Supervised-Learning-of-a-DCNN-for-Semantic-Image-Segmentation/</id>
+    <published>2020-07-03T01:41:03.000Z</published>
+    <updated>2020-07-03T01:45:27.402Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><strong>Authors:</strong>     George Papandreou, Liang-Chieh Chen, Kevin Murphy，Alan L. Yuille</li><li><strong>Publish:</strong>       ICCV 2015</li><li><strong>link：</strong><a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Papandreou_Weakly-_and_Semi-Supervised_ICCV_2015_paper.pdf" target="_blank" rel="noopener">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Papandreou_Weakly-_and_Semi-Supervised_ICCV_2015_paper.pdf</a></li></ul><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Authors:&lt;/strong&gt;     George Papandreou, Liang-Chieh Chen, Kevin Murphy，Alan L. Yuille&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Publish:&lt;/strong&gt;  
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>test_my_site</title>
