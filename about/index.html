@@ -86,7 +86,7 @@
 <meta name="description" content="天马山脚下的码畜 主要兴趣为计算机视觉，图像处理，数据分析，人工智能。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="about">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta property="og:url" content="https://hongjianyuan.github.io/about/index.html">
 <meta property="og:site_name" content="您好！">
 <meta property="og:description" content="天马山脚下的码畜 主要兴趣为计算机视觉，图像处理，数据分析，人工智能。">
 <meta property="article:published_time" content="2020-07-02T09:12:49.000Z">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about/"/>
+  <link rel="canonical" href="https://hongjianyuan.github.io/about/"/>
 
 
 
@@ -316,6 +316,9 @@
           
 
   
+    <div class="comments" id="comments">
+    </div>
+  
 
 
 
@@ -358,7 +361,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -645,6 +648,28 @@ setInterval("createtime()",250);
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'Kp6fbJQRDtf7SwlKz8MM2tym-gzGzoHsz',
+        appKey: '4OMI1Gm2hLt8oOolnLxpcpbQ',
+        placeholder: '留下您的爪印吧~~~~',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 

@@ -85,7 +85,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="您好！">
-<meta property="og:url" content="http://yoursite.com/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/index.html">
+<meta property="og:url" content="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/index.html">
 <meta property="og:site_name" content="您好！">
 <meta property="article:author" content="HongJianYuan">
 <meta name="twitter:card" content="summary">
@@ -118,7 +118,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/弱监督/"/>
+  <link rel="canonical" href="https://hongjianyuan.github.io/categories/弱监督/"/>
 
 
 
@@ -367,7 +367,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -650,6 +650,28 @@ setInterval("createtime()",250);
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: true,
+        appId: 'Kp6fbJQRDtf7SwlKz8MM2tym-gzGzoHsz',
+        appKey: '4OMI1Gm2hLt8oOolnLxpcpbQ',
+        placeholder: '留下您的爪印吧~~~~',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
 
 
 
