@@ -1,49 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Fully Convolutional Networks for Semantic Segmentation</title>
-    <url>/2020/07/03/FCN/</url>
+    <title>A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</title>
+    <url>/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/</url>
     <content><![CDATA[<ul>
-<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
-<li><strong>Publish:</strong> CVPR2015</li>
-<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
+<li><strong>Authors:</strong>     Yunchao Wei, Xiaodan Liang, Yunpeng Chen, Xiaohui Shen, Ming-Ming Cheng, Yao Zhao,Shuicheng Yan</li>
+<li><strong>Publish:</strong>       TPMI 2017</li>
+<li><a href="https://arxiv.org/pdf/1509.03150v1.pdf" target="_blank" rel="noopener">LINK</a></li>
 </ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
-<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
-<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
-<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
-<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
-<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
-<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
-<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
-<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
-<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
-<p><strong>上采样是反卷积</strong></p>
-<p>首先我们来看一下卷积</p>
-<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
-<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>反卷积</p>
-<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
-<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
-<ol>
-<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
-<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
-<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
-</ol>
-<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
-<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
-<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
-<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p>
+<p>答：训练这样的DCNN通常依赖于大量的具有像素级分割标注的图像，并且注解这些图像在财力和人力两方面都是非常昂贵的。所以作者想要用图像级别的注释被用来学习DCNN的语义分割。</p>
+<p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p>
+<p>答：我们首先用简单图像的显著图（即，具有单个类别的主要对象和干净背景的那些）来训练初始分割网络Initial-DCNN。这些显著图可以通过现有的自下而上的显著物体检测技术自动获得，其中不需要监督信息。然后，基于Initial-DCNN以及图像级注释，在预测的简单图像的分割标注的监督下，学习一个称为Enhanced-DCNN的更好的网络。最后，利用Enhanced-DCNN和图像级注释推导出复杂图像（背景杂乱的两类或多类物体）的更多像素级分割掩模作为监督信息学习Powerful-DCNN语义分割。主要思路就是层层递进。</p>
+<p><strong>3.作者给出的答案是什么？</strong></p>
+<p>答：在PASCAL VOC 2012分割基准上的大量实验结果表明，提出的STC框架大大优于弱监督语义分割的最新算法。</p>
+<h2 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h2><p>为了解决标注大量的像素级掩模通常需要大量的财务费用以及人力，相关研究者们已经提出了一些方法，仅仅使用图像级标签作为监督信息进行语义分割。然而，就我们所知，这些方法的性能远不能令人满意，考虑到语义分割问题的复杂性，如类内高度差异（例如多样的外观，观点和尺度）以及不同的类别、对象之间的相互作用（例如，部分可见性和遮挡），具有图像级注释的复杂损失函数（例如，基于多实例学习的损失函数）由于对分割掩模的内在像素级属性的忽略，可能不足以用于弱监督语义分割。</p>
+<p>在这项工作中，我们基于以下认识（intuition）提出了一个简单到复杂的弱监督分割框架。</p>
+<p>这项工作所做的贡献总结如下：</p>
+<p>（1）我们提出了一个简单到复杂的（STC）框架，能够以弱监督的方式有效地训练分割DCNN（即，仅提供图像级标签）。所提出的框架是通用的，并且可以结合任何最先进的全监督网络结构来学习分割网络。</p>
+<p>（2）引入了一个多标签交叉熵损失函数来训练基于显著图的分割网络，其中每个像素能够以不同的概率自适应地归结于前景类别和背景。</p>
+<p>（3） 我们在PASCAL VOC 2012分割基准上评估我们的方法[24]。 实验结果很好地证明了STC框架的有效性，达到了最先进的实验结果。</p>
+<h2 id="RELATED-WORK"><a href="#RELATED-WORK" class="headerlink" title="RELATED WORK"></a><strong>RELATED WORK</strong></h2><h3 id="Weakly-Supervised-Semantic-Segmentation"><a href="#Weakly-Supervised-Semantic-Segmentation" class="headerlink" title="Weakly Supervised Semantic Segmentation"></a>Weakly Supervised Semantic Segmentation</h3><p>为了减轻像素级掩模标注的负担，已经提出了一些用于语义分割的弱监督方法。通过利用带注释的边界框来估计语义分割。为了进一步减少边界框收集的负担，一些工作提出仅通过使用图像级标签来训练分割网络。</p>
+<h3 id="Self-paced-Learning"><a href="#Self-paced-Learning" class="headerlink" title="Self-paced Learning"></a>Self-paced Learning</h3><p>略。</p>
+<h2 id="PROPOSED-METHOD"><a href="#PROPOSED-METHOD" class="headerlink" title="PROPOSED METHOD"></a>PROPOSED METHOD</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/1.JPG" alt></p>
+<p>（STC）框架的说明。（a） 首先由DRIF生成简单图像的高质量显著性图，作为有监督的前景/背景掩模，利用该损失函数训练初始DCNN。（b） 然后，学习一个更好的增强DCNN，并用初始DCNN预测的分割掩码进行监督。（c） 最后，预测出更多的复杂图像掩模来训练一个更强大的网络，称为强大的DCNN。</p>
+<h2 id="Initial-DCNN"><a href="#Initial-DCNN" class="headerlink" title="Initial-DCNN"></a>Initial-DCNN</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/2.JPG" alt></p>
+<p>对于简单图片，先通过显著图预测出其最显著的区域。对于每个图像生成的显著图，较大像素值意味着这个像素更可能属于前景。上图显示了一些简单的例子图像和相应的显著图由DRFI方法生成。可以观察到，前景像素与语义之间的多个对象存在明显的相关性。由于每个简单的图像伴随着一个语义标签，可以很容易推断出前景候选像素可以分配相应的图像级标签。随后，由一个多标签交叉熵损失函数来训练分割网络，以显著图作为监督信息。</p>
+<p>假设训练集中有C个类。用O<sub>I</sub>= {1,2，…，C}，O<sub>P</sub>= {0,1,2，…，C}分别表示图像级和像素级的类别集标签，其中0表示背景类。分割网络由f(•)过滤，其中所有的卷积层过滤给定的图像I。 f(•)会产生一个h * w * (c+1)维的激活输出，其中h和w分别表示每个通道的特征图的高度以及宽度。我们利用softmax函数对I中属于第k类的每一个像素进行计算，其表述如下:</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/3.JPG" alt></p>
+<p>语义分割的多标签交叉熵损失函数定义为:</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/4.JPG" alt></p>
+<p>p<sup>o</sup><sub>ij</sub>表示（i,j）处的像素属于背景的概率。将这个阶段学习到的分割网络表示为Initial-DCNN（简称I-DCNN）。</p>
+<h3 id="Simple-to-Complex-Framework"><a href="#Simple-to-Complex-Framework" class="headerlink" title="Simple to Complex Framework"></a>Simple to Complex Framework</h3><p>在这一部分中，我们提出了一种迭代训练策略，将更复杂的图像与图像级标签结合起来，以增强DCNN的分割能力。基于训练后的I-DCNN，可以预测图像的分割掩模，从而进一步提高DCNN的分割能力。我们将位置（i，j）处的第k类的预测概率表示为p<sup>k</sup><sub>ij</sub>。然后，通过分割DCNN的位置（i，j）处的像素的估计标记g<sub>ij</sub>可以被描述为</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/5.JPG" alt></p>
+<h4 id="Enhanced-DCNN"><a href="#Enhanced-DCNN" class="headerlink" title="Enhanced-DCNN"></a>Enhanced-DCNN</h4><p>然而，当I-DCNN作为训练DCNN的监督时，来自I-DCNN的错误预测可能会导致语义分割的偏移。幸运的是，对于训练集中的每一个简单图像，给出了图像级别标签，可以用来细化预测的分割掩模。具体地说，如果简单图像I用c（c∈O<sub>I</sub>）标记，则像素的估计标签可以重新表示为</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/6.JPG" alt></p>
+<p>其中0表示背景的类别。这样，可以消除训练集中简单图像的一些错误预测。因此，利用预测的分割掩模作为监督信息，训练出一个更强大的分割DCNN，简称EDCNN。我们用传统的交叉熵损失函数训练E-DCNN，它被全监督方案广泛使用。</p>
+<h4 id="Powerful-DCNN"><a href="#Powerful-DCNN" class="headerlink" title="Powerful-DCNN"></a>Powerful-DCNN</h4><p>在这一阶段中，利用含有更多语义对象和杂乱背景的复杂图像对分割后的DCNN进行训练。与I-DCNN相比，E-DCNN具有更强的语义切分能力，因为它使用了大量的预测分割。虽然E-DCNN是基于简单图像进行训练的，但是这些图像中的语义对象在外观、尺度和视点上都有很大的变化，这与它们在复杂图像中的外观变化是一致的。因此，我们可以应用E-DCNN来预测复杂图像的分割。</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/7.JPG" alt></p>
+<p>式中，Ω表示每个图像I的一组基本真实语义标签（包括背景），我们将在此阶段训练的分割网络表示为强大的DCNN（简称P-DCNN）。为了说明每个步骤的有效性，图3显示了I-DCNN、E-DCNN和P-DCNN生成的一些分割结果。从中可以看出，基于所提出的由简单到复杂的分割框架，分割结果不断得到改善。</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/8.JPG" alt></p>
 ]]></content>
       <categories>
         <category>图像分割</category>
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
+        <category>弱监督</category>
         <category>论文</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>卷积神经网络（CNN）讲解</title>
+    <url>/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/</url>
+    <content><![CDATA[<p>本文主要是对于花书的第9章《卷积网络》所做的笔记，并且结合网络上相关资料，侵删。</p>
+<p><strong>卷积神经网络</strong>（Convolutional neural network，CNN）（LeCun，1989），是一种专门处理用来具有类似网格结构的数据的神经网络。例如时间序列数据（一维）或者图像数据（二维），在诸多应用领域都表现优异。卷积是一种特殊的线性运算，是指那些至少在网络的一层中使用卷积运算来代替一般的矩阵乘法运算的神经网络。</p>
+<h3 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h3><p>例子引入：假设我们正在用激光传感器追踪一艘宇宙飞船的位置。我们的激光传感器给出一个单独的输出x(t)，表示宇宙飞船在时刻t 的位置。x 和t 都是实值的，这意味着我们可以在任意时刻从传感器中读出飞船的位置。现在假设我们的传感器含有噪声。为了得到飞船位置的低噪声估计，我们对得到的测量结果进行平均。显然，时间上越近的测量结果越相关，所以我们采用一种加权平均的方法，对于最近的测量结果赋予更高的权值。我们可以采用一个加权函数w(a) 来实现，其中a 表示测量结果据当前时刻的时间间隔。如果我们对任意时刻都采用这种加权平均的操作，就得到了对于飞船位置的连续估计函数s：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/1.JPG" alt></p>
+<p>这种运算就叫做卷积(convolution)。卷积运算通常用星号表示：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/2.JPG" alt></p>
+<p>在卷积神经网络的术语中，第一个参数（在这个例子中，函数x）叫做<strong>输入</strong>(input)，第二个参数（函数w）叫做<strong>核函数</strong>(kernel function)。输出有时被称作<strong>特征映射</strong>（feature map）。</p>
+<p>核函数的定义：<strong>对于输入图像中的一部分区域，进行加权求和的处理，其中这个过程的权重，由一个函数定义，这个函数就是卷积核</strong></p>
+<p>在我们的例子中，连续时间是不现实的，通常采用离散时间（就是每隔几秒反馈一次），所以时间t 只能<br>取整数值。如果我们假设x 和w 都定义在整数时刻t 上，就得到了离散形式的卷积：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/3.JPG" alt></p>
+<p>在机器学习的应用中，输入通常是高维数据数组，而核也是由算法产生的高维参数数组。我们把这种高维数组叫做张量。因为输入与核的每一个元素都分开存储，我们经常假设在存储了数据的有限点集以外，这些函数的值都为零。这意味着在实际操作中，我们可以统一地把无限的求和当作对有限个数组元素的求和来用。</p>
+<p>如果把二维的图像I 作为输入，我们也相应的需要使用二维的核K：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/4.JPG" alt></p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/5.JPG" alt></p>
+<p>上图展示了一个在二维张量上的卷积运算的例子。是不是这张图比较难以理解，我们放在动图帮助理解。</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/11.gif" alt></p>
+<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>卷积运算通过三个重要的思想来帮助改进机器学习系统：稀疏交互(sparse interactions)、参数共享(parameter sharing)、等变表示(equivariant representations)。</p>
+<h4 id="稀疏交互"><a href="#稀疏交互" class="headerlink" title="稀疏交互"></a>稀疏交互</h4><p>卷积神经网络具有稀疏交互(sparse interactions)（也叫做稀疏连接(sparse connectivity) 或者稀疏权重(sparse weights)）的特征。这通过使得核的规模远小于输入的规模来实现。</p>
+<h4 id="参数共享"><a href="#参数共享" class="headerlink" title="参数共享"></a>参数共享</h4><p>在卷积神经网络中，核的每一个元素都作用在输入的每一个位置。卷积运算中的参数共享保证了我们只需要学习一个参数集合，而不是对于每一个位置都需要学习一个单独的参数集合。</p>
+<h4 id="等变"><a href="#等变" class="headerlink" title="等变"></a>等变</h4><p>对于卷积，参数共享的特殊形式是的神经网络具有对平移等变得性质。如果一个函数满足输入改变，输出也以同样的方式改变这一性质，我们就说它是等变的。</p>
+<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化函数使用某一位置的相邻输出的总体统计特征来代替网络在该位置的输出。</p>
+<p><strong>最大池化(max pooling)</strong> 函数(Zhou and Chellappa, 1988) 给出相邻矩形区域内的最大值。</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/8.jpg" alt></p>
+<p>其他常用的池化函数包括相邻矩形区域内的平均值、L2 范数以及依靠据中心像素距离的加权平均函数。不管采用什么样的池化函数，当输入作出少量平移时，池化能帮助我们的表示近似不变(invariant)。</p>
+<h3 id="卷积与池化作为一种无限强的先验"><a href="#卷积与池化作为一种无限强的先验" class="headerlink" title="卷积与池化作为一种无限强的先验"></a>卷积与池化作为一种无限强的先验</h3><p>先验被认为是强或者弱取决于先验中概率密度的集中程度。弱先验具有较高的熵值，例如方差很大的高斯分布，这样的先验允许数据对于参数的改变具有或多或少的自由性。强先验具有较低的熵值，例如方差很小的高斯分布，样的先验在决定参数最终取值时起着更加积极的作用。</p>
+<p>但把卷积神经网络想成具有无限强先验的全连接网络可以帮助我们更好地洞察卷积神经网络是如何工作的。其中一个关键的洞察是卷积和池化可能导致欠拟合。另一个关键洞察是当我们比较卷积模型的统计学习表现时，只能以基准中的其他卷积模型作为比较的对象。</p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>单通道</th>
+<th>多通道</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 维</td>
+<td>音频波形：卷积的轴对应于时间。我们将时间离散化并且在每个时间点测量一次波形的振幅</td>
+<td>骨架动画(skeleton animation) 数据：计算机渲染的3D 角色动画是通过随时间调整‘‘骨架’’ 的姿势而生成的。在每个时间点，角色的姿势通过骨架中的每个关节的角度来描述。我们输入到卷积模型的数据的每个通道，表示一个关节的关于一个轴的角度。</td>
+</tr>
+<tr>
+<td>2 维</td>
+<td>已经用傅立叶变换预处理的音频数据：我们可以将音频波形变换成2 维张量，不同的行对应不同的频率，不同的列对应不同的时间点。在时间轴上使用卷积使模型等效于在时间上移动。在频率轴上使用卷积使得模型等效于在频率上移动，这使得在不同八度音阶中播放的相同旋律产生相同的表示，但处于网络输出中的不同高度。</td>
+<td>彩色图像数据：其中一个通道包含红色像素，另一个包含绿色像素，最后一个包含蓝色像素。在图像的水平轴和竖直轴上移动卷积核，赋予了两个方向上平移等变性。</td>
+</tr>
+<tr>
+<td>3 维</td>
+<td>体积数据：这种数据一般来源于医学成像技术，例如CT 扫描等。</td>
+<td>彩色视频数据：其中一个轴对应着时间，另一个轴对应着视频帧的高度，最后一个对应着视频帧的宽度。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
       </categories>
   </entry>
   <entry>
@@ -112,68 +176,54 @@
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
-        <category>论文</category>
         <category>弱监督</category>
+        <category>论文</category>
       </categories>
   </entry>
   <entry>
-    <title>卷积神经网络（CNN）讲解</title>
-    <url>/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/</url>
-    <content><![CDATA[<p>本文主要是对于花书的第9章《卷积网络》所做的笔记，并且结合网络上相关资料，侵删。</p>
-<p><strong>卷积神经网络</strong>（Convolutional neural network，CNN）（LeCun，1989），是一种专门处理用来具有类似网格结构的数据的神经网络。例如时间序列数据（一维）或者图像数据（二维），在诸多应用领域都表现优异。卷积是一种特殊的线性运算，是指那些至少在网络的一层中使用卷积运算来代替一般的矩阵乘法运算的神经网络。</p>
-<h3 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h3><p>例子引入：假设我们正在用激光传感器追踪一艘宇宙飞船的位置。我们的激光传感器给出一个单独的输出x(t)，表示宇宙飞船在时刻t 的位置。x 和t 都是实值的，这意味着我们可以在任意时刻从传感器中读出飞船的位置。现在假设我们的传感器含有噪声。为了得到飞船位置的低噪声估计，我们对得到的测量结果进行平均。显然，时间上越近的测量结果越相关，所以我们采用一种加权平均的方法，对于最近的测量结果赋予更高的权值。我们可以采用一个加权函数w(a) 来实现，其中a 表示测量结果据当前时刻的时间间隔。如果我们对任意时刻都采用这种加权平均的操作，就得到了对于飞船位置的连续估计函数s：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/1.JPG" alt></p>
-<p>这种运算就叫做卷积(convolution)。卷积运算通常用星号表示：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/2.JPG" alt></p>
-<p>在卷积神经网络的术语中，第一个参数（在这个例子中，函数x）叫做<strong>输入</strong>(input)，第二个参数（函数w）叫做<strong>核函数</strong>(kernel function)。输出有时被称作<strong>特征映射</strong>（feature map）。</p>
-<p>核函数的定义：<strong>对于输入图像中的一部分区域，进行加权求和的处理，其中这个过程的权重，由一个函数定义，这个函数就是卷积核</strong></p>
-<p>在我们的例子中，连续时间是不现实的，通常采用离散时间（就是每隔几秒反馈一次），所以时间t 只能<br>取整数值。如果我们假设x 和w 都定义在整数时刻t 上，就得到了离散形式的卷积：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/3.JPG" alt></p>
-<p>在机器学习的应用中，输入通常是高维数据数组，而核也是由算法产生的高维参数数组。我们把这种高维数组叫做张量。因为输入与核的每一个元素都分开存储，我们经常假设在存储了数据的有限点集以外，这些函数的值都为零。这意味着在实际操作中，我们可以统一地把无限的求和当作对有限个数组元素的求和来用。</p>
-<p>如果把二维的图像I 作为输入，我们也相应的需要使用二维的核K：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/4.JPG" alt></p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/5.JPG" alt></p>
-<p>上图展示了一个在二维张量上的卷积运算的例子。是不是这张图比较难以理解，我们放在动图帮助理解。</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/11.gif" alt></p>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>卷积运算通过三个重要的思想来帮助改进机器学习系统：稀疏交互(sparse interactions)、参数共享(parameter sharing)、等变表示(equivariant representations)。</p>
-<h4 id="稀疏交互"><a href="#稀疏交互" class="headerlink" title="稀疏交互"></a>稀疏交互</h4><p>卷积神经网络具有稀疏交互(sparse interactions)（也叫做稀疏连接(sparse connectivity) 或者稀疏权重(sparse weights)）的特征。这通过使得核的规模远小于输入的规模来实现。</p>
-<h4 id="参数共享"><a href="#参数共享" class="headerlink" title="参数共享"></a>参数共享</h4><p>在卷积神经网络中，核的每一个元素都作用在输入的每一个位置。卷积运算中的参数共享保证了我们只需要学习一个参数集合，而不是对于每一个位置都需要学习一个单独的参数集合。</p>
-<h4 id="等变"><a href="#等变" class="headerlink" title="等变"></a>等变</h4><p>对于卷积，参数共享的特殊形式是的神经网络具有对平移等变得性质。如果一个函数满足输入改变，输出也以同样的方式改变这一性质，我们就说它是等变的。</p>
-<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化函数使用某一位置的相邻输出的总体统计特征来代替网络在该位置的输出。</p>
-<p><strong>最大池化(max pooling)</strong> 函数(Zhou and Chellappa, 1988) 给出相邻矩形区域内的最大值。</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/8.jpg" alt></p>
-<p>其他常用的池化函数包括相邻矩形区域内的平均值、L2 范数以及依靠据中心像素距离的加权平均函数。不管采用什么样的池化函数，当输入作出少量平移时，池化能帮助我们的表示近似不变(invariant)。</p>
-<h3 id="卷积与池化作为一种无限强的先验"><a href="#卷积与池化作为一种无限强的先验" class="headerlink" title="卷积与池化作为一种无限强的先验"></a>卷积与池化作为一种无限强的先验</h3><p>先验被认为是强或者弱取决于先验中概率密度的集中程度。弱先验具有较高的熵值，例如方差很大的高斯分布，这样的先验允许数据对于参数的改变具有或多或少的自由性。强先验具有较低的熵值，例如方差很小的高斯分布，样的先验在决定参数最终取值时起着更加积极的作用。</p>
-<p>但把卷积神经网络想成具有无限强先验的全连接网络可以帮助我们更好地洞察卷积神经网络是如何工作的。其中一个关键的洞察是卷积和池化可能导致欠拟合。另一个关键洞察是当我们比较卷积模型的统计学习表现时，只能以基准中的其他卷积模型作为比较的对象。</p>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><table>
-<thead>
-<tr>
-<th></th>
-<th>单通道</th>
-<th>多通道</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1 维</td>
-<td>音频波形：卷积的轴对应于时间。我们将时间离散化并且在每个时间点测量一次波形的振幅</td>
-<td>骨架动画(skeleton animation) 数据：计算机渲染的3D 角色动画是通过随时间调整‘‘骨架’’ 的姿势而生成的。在每个时间点，角色的姿势通过骨架中的每个关节的角度来描述。我们输入到卷积模型的数据的每个通道，表示一个关节的关于一个轴的角度。</td>
-</tr>
-<tr>
-<td>2 维</td>
-<td>已经用傅立叶变换预处理的音频数据：我们可以将音频波形变换成2 维张量，不同的行对应不同的频率，不同的列对应不同的时间点。在时间轴上使用卷积使模型等效于在时间上移动。在频率轴上使用卷积使得模型等效于在频率上移动，这使得在不同八度音阶中播放的相同旋律产生相同的表示，但处于网络输出中的不同高度。</td>
-<td>彩色图像数据：其中一个通道包含红色像素，另一个包含绿色像素，最后一个包含蓝色像素。在图像的水平轴和竖直轴上移动卷积核，赋予了两个方向上平移等变性。</td>
-</tr>
-<tr>
-<td>3 维</td>
-<td>体积数据：这种数据一般来源于医学成像技术，例如CT 扫描等。</td>
-<td>彩色视频数据：其中一个轴对应着时间，另一个轴对应着视频帧的高度，最后一个对应着视频帧的宽度。</td>
-</tr>
-</tbody></table>
+    <title>Fully Convolutional Networks for Semantic Segmentation</title>
+    <url>/2020/07/03/FCN/</url>
+    <content><![CDATA[<ul>
+<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
+<li><strong>Publish:</strong> CVPR2015</li>
+<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
+<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
+<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
+<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
+<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
+<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
+<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
+<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
+<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
+<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
+<p><strong>上采样是反卷积</strong></p>
+<p>首先我们来看一下卷积</p>
+<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
+<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>反卷积</p>
+<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
+<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
+<ol>
+<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
+<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
+<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
+</ol>
+<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
+<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
+<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
+<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
 ]]></content>
       <categories>
+        <category>图像分割</category>
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
+        <category>论文</category>
       </categories>
   </entry>
 </search>
