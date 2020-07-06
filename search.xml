@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Fully Convolutional Networks for Semantic Segmentation</title>
+    <url>/2020/07/03/FCN/</url>
+    <content><![CDATA[<ul>
+<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
+<li><strong>Publish:</strong> CVPR2015</li>
+<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
+<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
+<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
+<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
+<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
+<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
+<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
+<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
+<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
+<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
+<p><strong>上采样是反卷积</strong></p>
+<p>首先我们来看一下卷积</p>
+<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
+<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>反卷积</p>
+<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
+<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
+<ol>
+<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
+<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
+<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
+</ol>
+<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
+<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
+<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
+<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
+]]></content>
+      <categories>
+        <category>图像分割</category>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
+        <category>论文</category>
+      </categories>
+  </entry>
+  <entry>
     <title>A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</title>
     <url>/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/</url>
     <content><![CDATA[<ul>
@@ -46,8 +92,49 @@
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
-        <category>论文</category>
         <category>弱监督</category>
+        <category>论文</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>《机器学习-周志华》-绪论</title>
+    <url>/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/</url>
+    <content><![CDATA[<p><strong>基本术语</strong></p>
+<p><strong>1.属性/特征（feature）</strong>：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。</p>
+<p><strong>2.特征向量（feature vector）</strong>：假设西瓜有色泽，根蒂，敲声作为三个坐标，则它们张成一个用于描述西瓜的的三维空间，每个西瓜都可以在这个空间找到自己的位置，由于空间内的每个点对应一个坐标向量，因此把（色泽，根蒂，敲声）称为特征向量。</p>
+<p><strong>3.维数</strong>（<strong>dimensionality</strong>）：**某一个样本的特征个数。</p>
+<p><strong>4.训练数据（training data）</strong>：训练过程使用的数据，其中每一个样本成为训练样本，组成的集合成为训练集。</p>
+<p><strong>5.假设（hypothesis）：</strong>学得模型对应了关于数据的某种潜在规律。</p>
+<p><strong>6.真相（ground-truth）：</strong>这种潜在规律自身。</p>
+<p><strong>7.学习过程（training）</strong>：学习过程就是为了找出真相或者逼近真相，所得到的称为学习器或者模型。</p>
+<p><strong>8.标签（label）</strong>：就是示例的结果Y</p>
+<p><strong>9.分类（classification）：</strong>学习任务是预测离散的值Y</p>
+<p><strong>10.回归（regression）：</strong>学习任务是预测连续的值Y</p>
+<p><strong>11.监督学习（supervised）：</strong>训练数据拥有标签信息，如分类，回归</p>
+<p><strong>12.无监督学习（unsupervised）：</strong>训练数据没有标签信息，如聚类</p>
+<p><strong>13.泛化能力（generalization）</strong>：学得的模型适用于新样本的能力。具有强的泛化能力的某型能够很好的适用整个样本空间。</p>
+<p><strong>14.分布（distribution）：</strong>通常假设样本空间中全体服从一个未知的“分布”D，我们获得的每个样本都是独立的从这个分布采样获得的，即独立同分布，训练样本越多，我们得到D的信息就越多，这样就具有跟好的泛化能力。</p>
+<p><strong>假设空间</strong></p>
+<p><strong>归纳</strong>与<strong>演绎</strong>，前者从特殊到一般的泛化过程，即从具体事实归结出一般性规律，后者则是从一般到特殊的“特化”过程，即从基础原理推演出具体情况。</p>
+<p>我们可以把学习过程看做成一个在所有假设组成的空间中进行的搜索过程，搜索目标就是找到与训练集相匹配的假设。假设表示一旦确定，假设空间及其规模也就确定了。例如我们上面的例子，西瓜的色泽，根蒂，敲声为特征，那么假设空间就为</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/5.png" alt></p>
+<p>假设这三种分别为3，2，2，同时还要考虑随便一种都行，以及世界上没有好瓜的空集，那么假设空间的规模就为4<em>3</em>3+1=37.</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/1.png" alt></p>
+<p>当然搜索这个假设空间的策略有很多种，如自顶向下，自底向上等。搜索过程可以不断删掉与正例不一致的假设，与反例一致的假设。</p>
+<p><strong>版本空间</strong>：现实问题面临着很大的假设空间，但学习过程是基于有限样本训练集进行的，因此可能有多个假设与训练集一致，即存在一个与训练集一致的“假设集合”。</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/2.png" alt></p>
+<p><strong>归纳偏好</strong></p>
+<p>这可能是第一章的大坑，归纳偏好简单理解就是学习算法的结果判断必须要有一个明确的衡量方式，机器学习算法在学习过程中对某种类型假设的偏好。</p>
+<p>举个例子，比如说回归的学习图，每一个训练样本对应图中的点（x，y）要学的一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线，显然会有多条，我们的学习算法必须有某种偏好，才能判断出“正确”的模型。</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/3.png" alt></p>
+<p>归纳偏好可以看成学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”。所以可能会有一般性的原则来引导算法确立“正确的价值观”。“<strong>奥卡姆剃刀</strong>”是一种常用的，自然科学研究中最基本的原则，即“<strong>若有多个假设与观察一致，则选择最简单的那个</strong>”。则我们会认为A比B好。当然奥卡姆剃刀也存在着问题，它本身就存在不同的诠释，如西瓜问题，到底哪种假设更“简单”。<strong>在具体问题中，这个假设是否成立，即算法的归纳偏好是否与问题本身相匹配，大多数时候直接决定了算法能否取得好的性能。</strong></p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/4.png" alt></p>
+<p>有可能也会出现与A相比，B与训练集外的样本更一致。<strong>“没有免费的午餐”定理（</strong>NFL<strong>）：</strong>无论某一个算法多聪明，某一个算法多笨，他们的期望性能相同。NFL有一个重要的前提就是所有“问题”出现的机会相同，或所有问题同等重要。<strong>其实</strong>NFL<strong>最重要的意义在于，让我们清楚的认识到，脱离具体问题，空谈“什么学习算法更好”毫无意义。因此学习算法自身的归纳偏好与问题是否相配，起到决定性作用。</strong></p>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>机器学习</category>
+        <category>西瓜书</category>
       </categories>
   </entry>
   <entry>
@@ -116,94 +203,7 @@
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
-        <category>论文</category>
         <category>弱监督</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>《机器学习-周志华》-绪论</title>
-    <url>/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/</url>
-    <content><![CDATA[<p><strong>基本术语</strong></p>
-<p><strong>1.属性/特征（feature）</strong>：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。</p>
-<p><strong>2.特征向量（feature vector）</strong>：假设西瓜有色泽，根蒂，敲声作为三个坐标，则它们张成一个用于描述西瓜的的三维空间，每个西瓜都可以在这个空间找到自己的位置，由于空间内的每个点对应一个坐标向量，因此把（色泽，根蒂，敲声）称为特征向量。</p>
-<p><strong>3.维数</strong>（<strong>dimensionality</strong>）：**某一个样本的特征个数。</p>
-<p><strong>4.训练数据（training data）</strong>：训练过程使用的数据，其中每一个样本成为训练样本，组成的集合成为训练集。</p>
-<p><strong>5.假设（hypothesis）：</strong>学得模型对应了关于数据的某种潜在规律。</p>
-<p><strong>6.真相（ground-truth）：</strong>这种潜在规律自身。</p>
-<p><strong>7.学习过程（training）</strong>：学习过程就是为了找出真相或者逼近真相，所得到的称为学习器或者模型。</p>
-<p><strong>8.标签（label）</strong>：就是示例的结果Y</p>
-<p><strong>9.分类（classification）：</strong>学习任务是预测离散的值Y</p>
-<p><strong>10.回归（regression）：</strong>学习任务是预测连续的值Y</p>
-<p><strong>11.监督学习（supervised）：</strong>训练数据拥有标签信息，如分类，回归</p>
-<p><strong>12.无监督学习（unsupervised）：</strong>训练数据没有标签信息，如聚类</p>
-<p><strong>13.泛化能力（generalization）</strong>：学得的模型适用于新样本的能力。具有强的泛化能力的某型能够很好的适用整个样本空间。</p>
-<p><strong>14.分布（distribution）：</strong>通常假设样本空间中全体服从一个未知的“分布”D，我们获得的每个样本都是独立的从这个分布采样获得的，即独立同分布，训练样本越多，我们得到D的信息就越多，这样就具有跟好的泛化能力。</p>
-<p><strong>假设空间</strong></p>
-<p><strong>归纳</strong>与<strong>演绎</strong>，前者从特殊到一般的泛化过程，即从具体事实归结出一般性规律，后者则是从一般到特殊的“特化”过程，即从基础原理推演出具体情况。</p>
-<p>我们可以把学习过程看做成一个在所有假设组成的空间中进行的搜索过程，搜索目标就是找到与训练集相匹配的假设。假设表示一旦确定，假设空间及其规模也就确定了。例如我们上面的例子，西瓜的色泽，根蒂，敲声为特征，那么假设空间就为</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/5.png" alt></p>
-<p>假设这三种分别为3，2，2，同时还要考虑随便一种都行，以及世界上没有好瓜的空集，那么假设空间的规模就为4<em>3</em>3+1=37.</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/1.png" alt></p>
-<p>当然搜索这个假设空间的策略有很多种，如自顶向下，自底向上等。搜索过程可以不断删掉与正例不一致的假设，与反例一致的假设。</p>
-<p><strong>版本空间</strong>：现实问题面临着很大的假设空间，但学习过程是基于有限样本训练集进行的，因此可能有多个假设与训练集一致，即存在一个与训练集一致的“假设集合”。</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/2.png" alt></p>
-<p><strong>归纳偏好</strong></p>
-<p>这可能是第一章的大坑，归纳偏好简单理解就是学习算法的结果判断必须要有一个明确的衡量方式，机器学习算法在学习过程中对某种类型假设的偏好。</p>
-<p>举个例子，比如说回归的学习图，每一个训练样本对应图中的点（x，y）要学的一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线，显然会有多条，我们的学习算法必须有某种偏好，才能判断出“正确”的模型。</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/3.png" alt></p>
-<p>归纳偏好可以看成学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”。所以可能会有一般性的原则来引导算法确立“正确的价值观”。“<strong>奥卡姆剃刀</strong>”是一种常用的，自然科学研究中最基本的原则，即“<strong>若有多个假设与观察一致，则选择最简单的那个</strong>”。则我们会认为A比B好。当然奥卡姆剃刀也存在着问题，它本身就存在不同的诠释，如西瓜问题，到底哪种假设更“简单”。<strong>在具体问题中，这个假设是否成立，即算法的归纳偏好是否与问题本身相匹配，大多数时候直接决定了算法能否取得好的性能。</strong></p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/4.png" alt></p>
-<p>有可能也会出现与A相比，B与训练集外的样本更一致。<strong>“没有免费的午餐”定理（</strong>NFL<strong>）：</strong>无论某一个算法多聪明，某一个算法多笨，他们的期望性能相同。NFL有一个重要的前提就是所有“问题”出现的机会相同，或所有问题同等重要。<strong>其实</strong>NFL<strong>最重要的意义在于，让我们清楚的认识到，脱离具体问题，空谈“什么学习算法更好”毫无意义。因此学习算法自身的归纳偏好与问题是否相配，起到决定性作用。</strong></p>
-]]></content>
-      <categories>
-        <category>人工智能</category>
-        <category>机器学习</category>
-        <category>西瓜书</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Fully Convolutional Networks for Semantic Segmentation</title>
-    <url>/2020/07/03/FCN/</url>
-    <content><![CDATA[<ul>
-<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
-<li><strong>Publish:</strong> CVPR2015</li>
-<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
-</ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
-<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
-<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
-<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
-<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
-<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
-<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
-<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
-<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
-<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
-<p><strong>上采样是反卷积</strong></p>
-<p>首先我们来看一下卷积</p>
-<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
-<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>反卷积</p>
-<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
-<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
-<ol>
-<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
-<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
-<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
-</ol>
-<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
-<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
-<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
-<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
-]]></content>
-      <categories>
-        <category>图像分割</category>
-        <category>人工智能</category>
-        <category>计算机视觉</category>
-        <category>深度学习</category>
         <category>论文</category>
       </categories>
   </entry>
@@ -265,6 +265,50 @@
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation</title>
+    <url>/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/</url>
+    <content><![CDATA[<ul>
+<li><strong>Authors:</strong>     Changqian Yu, Jingbo Wang,Chao Peng, Changxin Gao, Gang Yu, Nong Sang</li>
+<li><strong>Publish:</strong>      ECCV 2018</li>
+<li><a href="https://arxiv.org/pdf/1808.00897.pdf" target="_blank" rel="noopener">Link</a></li>
+</ul>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p>
+<p>答：语义分割既需要丰富的空间信息，又需要较大的接受野。然而，现代的推理方法往往为了达到实时推理速度而牺牲空间分辨率，从而导致性能较差。本文就是为了解决较少空间分辨率，达到实时推理速度。</p>
+<p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p>
+<p>答：我们首先设计一个小步距的Spatial Path来保留空间信息并生成高分辨率特征。同时，采用快速下采样策略的Context Path来获得足够的感受野。在这两条路径的基础上，我们引入了一个新的特征融合模块来有效地组合特征。</p>
+<p><strong>3.作者给出的答案是什么？</strong></p>
+<p>答：所提出的体系结构在cityscape、CamVid和COCO-Stuff数据集的速度和分割性能之间取得了恰当的平衡。具体来说，对于2048×1024的输入，我们在城市景观测试数据集上以105 FPS的速度在一个NVIDIA Titan XP卡上实现了68.4%的平均IOU，这明显快于具有可比性能的现有方法。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>实时语义分割的算法中加速模型的方法主要有三种：（1）尝试通过裁剪或调整大小来限制输入大小以降低计算复杂性。虽然该方法简单有效，但空间细节的丢失会破坏预测结果，尤其是边界附近的预测，导致度量和可视化精度下降。（2）不用调整输入图像的大小，而是对网络的通道进行修剪以提高推理速度，尤其是在基本模型的早期阶段。然而，它削弱了空间容量。（3）例如，ENet建议放弃模型的最后一个阶段，以追求一个非常紧凑的框架。然而，这种方法的缺点是明显的：由于ENet在最后一阶段放弃了下采样操作，模型的接收场不足以覆盖大对象，导致识别能力差。</p>
+<p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/1.JPG" alt></p>
+<p>（a） 提出了对输入图像进行裁剪或调整大小的操作，以及具有修剪通道或删除阶段的轻量级模型。</p>
+<p>（b） 表示U形结构。</p>
+<p>（c） 演示了我们提出的双边分割网络（BiSeNet）。</p>
+<p>U形结构融合了主干网的层次特征，逐渐提高了空间分辨率，填补了一些缺失的细节。然而，这种技术有两个缺点:1） 由于在高分辨率特征地图上引入了额外的计算，完整的U形结构可以降低模型的速度。2） 更重要的是，修剪或修剪过程中丢失的大部分空间信息不能通过涉及图1（b）中所示的浅层来轻松恢复。</p>
+<p>我们的主要贡献如下：</p>
+<p>–我们提出了一种将空间信息保存和感受野提供功能分离为两条路径的新方法。具体来说，我们提出了一个具有空间路径（SP）和上下文路径（CP）的双边分割网络（BiSeNet）。</p>
+<p>–我们设计了两个特定的模块：特征融合模块（FFM）和注意力细化模块（ARM），以更高的成本进一步提高精度。</p>
+<p>–我们在城市景观、CamVid和COCO  Stuff的基准测试中取得了令人印象深刻的成果。更具体地说，我们在速度为105 FPS的城市景观测试数据集上获得了68.4%的结果。</p>
+<h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><h3 id="Spatial-information"><a href="#Spatial-information" class="headerlink" title="Spatial information:"></a>Spatial information:</h3><p>卷积神经网络（CNN）通过连续的下采样操作对高层语义信息进行编码。然而，在语义分割任务中，图像的空间信息对于预测细节输出至关重要。现有的现代方法致力于对丰富的空间信息进行编码。DUC、PSPNet、DeepLab v2[和deeplabv3使用空洞卷积来保持特征地图的空间大小。全局卷积网络利用“大核”扩大感受野。</p>
+<h3 id="U-Shape-method"><a href="#U-Shape-method" class="headerlink" title="U-Shape method:"></a>U-Shape method:</h3><p>U型结构可以恢复一定程度的空间信息。原FCN网络采用跳连网络结构对不同层次的特征进行编码。有些方法将其特定的细化结构转化为U形网络结构。然而，在U形结构中，一些丢失的空间信息很难恢复。</p>
+<h3 id="Context-information："><a href="#Context-information：" class="headerlink" title="Context information："></a>Context information：</h3><p>语义分割需要上下文信息来生成高质量的结果。大多数常用的方法是扩大接受野或融合不同的语境信息。卷积层中使用不同的膨胀率来捕获不同的上下文信息。在图像金字塔的驱动下，语义分割的网络结构通常采用多尺度特征集成的方法。</p>
+<h3 id="Attention-mechanism"><a href="#Attention-mechanism" class="headerlink" title="Attention mechanism:"></a>Attention mechanism:</h3><p>注意机制可以利用高层信息引导前馈网络。在[7]中，CNN的关注度取决于输入图像的尺度。在文献Squeeze-and-excitation networks中，他们将通道注意应用于识别任务，取得了最新的成果。和DFN一样，他们学习全局上下文作为注意力，并修改特征。</p>
+<h3 id="Real-time-segmentation"><a href="#Real-time-segmentation" class="headerlink" title="Real time segmentation:"></a>Real time segmentation:</h3><p>实时语义分割算法需要一种快速生成高质量预测的方法。SegNet利用一个小的网络结构和跳跃连接的方法来实现快速。E-Net从头开始设计一个轻量级网络，并提供极高的速度。ICNet使用图像级联来加速语义分割方法。difficulty-aware semantic segmentation via deep layer cascade.采用级联网络结构，减少“易失区”的计算量。Real-time semantic image segmentation via spatial sparsity设计了一种新颖的双列网络和空间稀疏性，以降低计算成本。不同的是，我们提出的方法使用一个轻量级模型来提供足够的感受野。此外，我们设置了一个浅而宽的网络来获取足够的空间信息。</p>
+<h2 id="Bilateral-Segmentation-Network"><a href="#Bilateral-Segmentation-Network" class="headerlink" title="Bilateral Segmentation Network"></a>Bilateral Segmentation Network</h2><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/2.JPG" alt></p>
+<h3 id="Spatial-path"><a href="#Spatial-path" class="headerlink" title="Spatial path"></a>Spatial path</h3><p>在语义分割任务中，现有的一些方法试图保持输入图像的分辨率，用扩张卷积来编码足够的空间信息，而一些方法则试图通过金字塔池模块来获取足够的感受野，atrus空间金字塔池或“大内核”,这些方法表明空间信息和感受野是获得高精度的关键。然而，这两个要求很难同时满足。尤其是在实时语义分割的情况下，现有的现代方法利用小输入图像或轻量级的基本模型来加速。小尺寸的输入图像丢失了原始图像的大部分空间信息，而轻量级模型则通过信道剪枝来破坏空间信息。在此基础上，我们提出了一种 Spatial path来保持原始输入图像的空间大小，并对丰富的空间信息进行编码。空间路径包含三层。每层包括一个步长为2的卷积，然后是批处理标准化和ReLU。因此，该路径提取的输出特征映射为原始图像的1/8。由于特征地图的空间尺寸较大，它编码了丰富的空间信息。图（a）显示了结构的细节。</p>
+<h3 id="Context-path"><a href="#Context-path" class="headerlink" title="Context path"></a>Context path</h3><p>上下文路径在空间路径编码丰富的空间信息的同时，设计上下文路径以提供足够的接受野。在语义切分任务中，感受野对语义切分的性能有着重要的意义。为了扩大感受野，一些方法利用了金字塔池模块、Atrus空间金字塔池或“大内核”。然而，这些操作都是计算量大、内存消耗大的操作，因此速度慢。同时考虑到大的感受野和高效的计算，我们提出了Context path。上下文路径利用轻量级模型和全局平均池化提供大的接受野。在这项工作中，轻量级模型，如Xception[8]，可以快速地对特征映射进行降采样，以获得大的接受域，从而编码高层语义上下文信息。然后在轻量级模型的尾部添加一个全局平均池，它可以为最大的接受域提供全局上下文信息。最后，我们结合全局池的上采样输出特性和轻量级模型的特性。在轻量化模型中，我们采用了U形结构来融合后两个阶段的特点，这是一个不完整的U形风格。图2（c）显示了上下文路径的整体透视图。注意细化模块：在上下文路径中，我们提出了一个特定的注意细化模块（ARM），以细化每个阶段的特征。如图2（b）所示，ARM使用全局平均池来捕获全局上下文，并计算一个注意力向量来指导特征学习。这种设计可以细化上下文路径中每个阶段的输出特性。它可以方便地集成全局上下文信息，无需任何上采样操作。因此，计算量可以忽略不计。</p>
+<h3 id="Network-architecture"><a href="#Network-architecture" class="headerlink" title="Network architecture"></a>Network architecture</h3><p>对于空间路径和上下文路径，我们建议使用BiSeNet进行实时语义分割，如图2（a）所示。我们使用预先训练好的异常模型作为上下文路径的主干，以三个具有步长的卷积层作为空间路径。然后对这两条路径的输出特征进行融合，做出最终的预测。它可以同时实现实时性和高精度。首先，我们将重点放在实际计算方面。虽然空间路径具有较大的空间尺寸，但它只有三个卷积层。因此，它不是计算密集型的。对于上下文路径，我们使用一个轻量级的模型来快速地向下采样。此外，这两条路径同时计算，大大提高了效率。其次，我们讨论这个网络的准确性方面。在本文中，空间路径编码丰富的空间信息，而上下文路径提供了大的接受野。它们相互补充以获得更高的性能。图2（c）显示了这个设计的细节。损失函数：在本文中，我们还利用辅助损失函数来监督我们提出的方法的训练。我们使用主损失函数来监督整个双网的输出。此外，我们添加了两个具体的辅助损失函数来监督上下文路径的输出，如深度监督。如等式1所示，所有损耗函数都是Softmax损耗。此外，我们使用参数α来平衡主损失和辅助损失的权重，如等式2所示。</p>
+<p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/3.JPG" alt></p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/4.JPG" alt></p>
+]]></content>
+      <categories>
+        <category>图像分割</category>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
+        <category>论文</category>
       </categories>
   </entry>
 </search>

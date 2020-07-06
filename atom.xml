@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hongjianyuan.github.io/"/>
-  <updated>2020-07-06T01:18:16.410Z</updated>
+  <updated>2020-07-06T02:25:22.665Z</updated>
   <id>https://hongjianyuan.github.io/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation</title>
+    <link href="https://hongjianyuan.github.io/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/"/>
+    <id>https://hongjianyuan.github.io/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/</id>
+    <published>2020-07-06T02:21:47.000Z</published>
+    <updated>2020-07-06T02:25:22.665Z</updated>
+    
+    <content type="html"><![CDATA[<ul><li><strong>Authors:</strong>     Changqian Yu, Jingbo Wang,Chao Peng, Changxin Gao, Gang Yu, Nong Sang</li><li><strong>Publish:</strong>      ECCV 2018</li><li><a href="https://arxiv.org/pdf/1808.00897.pdf" target="_blank" rel="noopener">Link</a></li></ul><h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p><p>答：语义分割既需要丰富的空间信息，又需要较大的接受野。然而，现代的推理方法往往为了达到实时推理速度而牺牲空间分辨率，从而导致性能较差。本文就是为了解决较少空间分辨率，达到实时推理速度。</p><p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p><p>答：我们首先设计一个小步距的Spatial Path来保留空间信息并生成高分辨率特征。同时，采用快速下采样策略的Context Path来获得足够的感受野。在这两条路径的基础上，我们引入了一个新的特征融合模块来有效地组合特征。</p><p><strong>3.作者给出的答案是什么？</strong></p><p>答：所提出的体系结构在cityscape、CamVid和COCO-Stuff数据集的速度和分割性能之间取得了恰当的平衡。具体来说，对于2048×1024的输入，我们在城市景观测试数据集上以105 FPS的速度在一个NVIDIA Titan XP卡上实现了68.4%的平均IOU，这明显快于具有可比性能的现有方法。</p><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>实时语义分割的算法中加速模型的方法主要有三种：（1）尝试通过裁剪或调整大小来限制输入大小以降低计算复杂性。虽然该方法简单有效，但空间细节的丢失会破坏预测结果，尤其是边界附近的预测，导致度量和可视化精度下降。（2）不用调整输入图像的大小，而是对网络的通道进行修剪以提高推理速度，尤其是在基本模型的早期阶段。然而，它削弱了空间容量。（3）例如，ENet建议放弃模型的最后一个阶段，以追求一个非常紧凑的框架。然而，这种方法的缺点是明显的：由于ENet在最后一阶段放弃了下采样操作，模型的接收场不足以覆盖大对象，导致识别能力差。</p><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/1.JPG" alt></p><p>（a） 提出了对输入图像进行裁剪或调整大小的操作，以及具有修剪通道或删除阶段的轻量级模型。</p><p>（b） 表示U形结构。</p><p>（c） 演示了我们提出的双边分割网络（BiSeNet）。</p><p>U形结构融合了主干网的层次特征，逐渐提高了空间分辨率，填补了一些缺失的细节。然而，这种技术有两个缺点:1） 由于在高分辨率特征地图上引入了额外的计算，完整的U形结构可以降低模型的速度。2） 更重要的是，修剪或修剪过程中丢失的大部分空间信息不能通过涉及图1（b）中所示的浅层来轻松恢复。</p><p>我们的主要贡献如下：</p><p>–我们提出了一种将空间信息保存和感受野提供功能分离为两条路径的新方法。具体来说，我们提出了一个具有空间路径（SP）和上下文路径（CP）的双边分割网络（BiSeNet）。</p><p>–我们设计了两个特定的模块：特征融合模块（FFM）和注意力细化模块（ARM），以更高的成本进一步提高精度。</p><p>–我们在城市景观、CamVid和COCO  Stuff的基准测试中取得了令人印象深刻的成果。更具体地说，我们在速度为105 FPS的城市景观测试数据集上获得了68.4%的结果。</p><h2 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h2><h3 id="Spatial-information"><a href="#Spatial-information" class="headerlink" title="Spatial information:"></a>Spatial information:</h3><p>卷积神经网络（CNN）通过连续的下采样操作对高层语义信息进行编码。然而，在语义分割任务中，图像的空间信息对于预测细节输出至关重要。现有的现代方法致力于对丰富的空间信息进行编码。DUC、PSPNet、DeepLab v2[和deeplabv3使用空洞卷积来保持特征地图的空间大小。全局卷积网络利用“大核”扩大感受野。</p><h3 id="U-Shape-method"><a href="#U-Shape-method" class="headerlink" title="U-Shape method:"></a>U-Shape method:</h3><p>U型结构可以恢复一定程度的空间信息。原FCN网络采用跳连网络结构对不同层次的特征进行编码。有些方法将其特定的细化结构转化为U形网络结构。然而，在U形结构中，一些丢失的空间信息很难恢复。</p><h3 id="Context-information："><a href="#Context-information：" class="headerlink" title="Context information："></a>Context information：</h3><p>语义分割需要上下文信息来生成高质量的结果。大多数常用的方法是扩大接受野或融合不同的语境信息。卷积层中使用不同的膨胀率来捕获不同的上下文信息。在图像金字塔的驱动下，语义分割的网络结构通常采用多尺度特征集成的方法。</p><h3 id="Attention-mechanism"><a href="#Attention-mechanism" class="headerlink" title="Attention mechanism:"></a>Attention mechanism:</h3><p>注意机制可以利用高层信息引导前馈网络。在[7]中，CNN的关注度取决于输入图像的尺度。在文献Squeeze-and-excitation networks中，他们将通道注意应用于识别任务，取得了最新的成果。和DFN一样，他们学习全局上下文作为注意力，并修改特征。</p><h3 id="Real-time-segmentation"><a href="#Real-time-segmentation" class="headerlink" title="Real time segmentation:"></a>Real time segmentation:</h3><p>实时语义分割算法需要一种快速生成高质量预测的方法。SegNet利用一个小的网络结构和跳跃连接的方法来实现快速。E-Net从头开始设计一个轻量级网络，并提供极高的速度。ICNet使用图像级联来加速语义分割方法。difficulty-aware semantic segmentation via deep layer cascade.采用级联网络结构，减少“易失区”的计算量。Real-time semantic image segmentation via spatial sparsity设计了一种新颖的双列网络和空间稀疏性，以降低计算成本。不同的是，我们提出的方法使用一个轻量级模型来提供足够的感受野。此外，我们设置了一个浅而宽的网络来获取足够的空间信息。</p><h2 id="Bilateral-Segmentation-Network"><a href="#Bilateral-Segmentation-Network" class="headerlink" title="Bilateral Segmentation Network"></a>Bilateral Segmentation Network</h2><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/2.JPG" alt></p><h3 id="Spatial-path"><a href="#Spatial-path" class="headerlink" title="Spatial path"></a>Spatial path</h3><p>在语义分割任务中，现有的一些方法试图保持输入图像的分辨率，用扩张卷积来编码足够的空间信息，而一些方法则试图通过金字塔池模块来获取足够的感受野，atrus空间金字塔池或“大内核”,这些方法表明空间信息和感受野是获得高精度的关键。然而，这两个要求很难同时满足。尤其是在实时语义分割的情况下，现有的现代方法利用小输入图像或轻量级的基本模型来加速。小尺寸的输入图像丢失了原始图像的大部分空间信息，而轻量级模型则通过信道剪枝来破坏空间信息。在此基础上，我们提出了一种 Spatial path来保持原始输入图像的空间大小，并对丰富的空间信息进行编码。空间路径包含三层。每层包括一个步长为2的卷积，然后是批处理标准化和ReLU。因此，该路径提取的输出特征映射为原始图像的1/8。由于特征地图的空间尺寸较大，它编码了丰富的空间信息。图（a）显示了结构的细节。</p><h3 id="Context-path"><a href="#Context-path" class="headerlink" title="Context path"></a>Context path</h3><p>上下文路径在空间路径编码丰富的空间信息的同时，设计上下文路径以提供足够的接受野。在语义切分任务中，感受野对语义切分的性能有着重要的意义。为了扩大感受野，一些方法利用了金字塔池模块、Atrus空间金字塔池或“大内核”。然而，这些操作都是计算量大、内存消耗大的操作，因此速度慢。同时考虑到大的感受野和高效的计算，我们提出了Context path。上下文路径利用轻量级模型和全局平均池化提供大的接受野。在这项工作中，轻量级模型，如Xception[8]，可以快速地对特征映射进行降采样，以获得大的接受域，从而编码高层语义上下文信息。然后在轻量级模型的尾部添加一个全局平均池，它可以为最大的接受域提供全局上下文信息。最后，我们结合全局池的上采样输出特性和轻量级模型的特性。在轻量化模型中，我们采用了U形结构来融合后两个阶段的特点，这是一个不完整的U形风格。图2（c）显示了上下文路径的整体透视图。注意细化模块：在上下文路径中，我们提出了一个特定的注意细化模块（ARM），以细化每个阶段的特征。如图2（b）所示，ARM使用全局平均池来捕获全局上下文，并计算一个注意力向量来指导特征学习。这种设计可以细化上下文路径中每个阶段的输出特性。它可以方便地集成全局上下文信息，无需任何上采样操作。因此，计算量可以忽略不计。</p><h3 id="Network-architecture"><a href="#Network-architecture" class="headerlink" title="Network architecture"></a>Network architecture</h3><p>对于空间路径和上下文路径，我们建议使用BiSeNet进行实时语义分割，如图2（a）所示。我们使用预先训练好的异常模型作为上下文路径的主干，以三个具有步长的卷积层作为空间路径。然后对这两条路径的输出特征进行融合，做出最终的预测。它可以同时实现实时性和高精度。首先，我们将重点放在实际计算方面。虽然空间路径具有较大的空间尺寸，但它只有三个卷积层。因此，它不是计算密集型的。对于上下文路径，我们使用一个轻量级的模型来快速地向下采样。此外，这两条路径同时计算，大大提高了效率。其次，我们讨论这个网络的准确性方面。在本文中，空间路径编码丰富的空间信息，而上下文路径提供了大的接受野。它们相互补充以获得更高的性能。图2（c）显示了这个设计的细节。损失函数：在本文中，我们还利用辅助损失函数来监督我们提出的方法的训练。我们使用主损失函数来监督整个双网的输出。此外，我们添加了两个具体的辅助损失函数来监督上下文路径的输出，如深度监督。如等式1所示，所有损耗函数都是Softmax损耗。此外，我们使用参数α来平衡主损失和辅助损失的权重，如等式2所示。</p><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/3.JPG" alt></p><h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><p><img src="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/4.JPG" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Authors:&lt;/strong&gt;     Changqian Yu, Jingbo Wang,Chao Peng, Changxin Gao, Gang Yu, Nong Sang&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Publish:&lt;/stro
+      
+    
+    </summary>
+    
+    
+      <category term="图像分割" scheme="https://hongjianyuan.github.io/categories/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/"/>
+    
+      <category term="人工智能" scheme="https://hongjianyuan.github.io/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    
+      <category term="计算机视觉" scheme="https://hongjianyuan.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
+    
+      <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>《机器学习-周志华》-绪论</title>
@@ -75,9 +109,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
-    
       <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
+    
+      <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
     
     
   </entry>
@@ -175,9 +209,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
-    
       <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
+    
+      <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
     
     
   </entry>
