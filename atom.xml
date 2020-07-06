@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hongjianyuan.github.io/"/>
-  <updated>2020-07-05T09:06:06.445Z</updated>
+  <updated>2020-07-06T01:18:16.410Z</updated>
   <id>https://hongjianyuan.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《机器学习-周志华》-绪论</title>
+    <link href="https://hongjianyuan.github.io/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/"/>
+    <id>https://hongjianyuan.github.io/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/</id>
+    <published>2020-07-06T01:09:54.000Z</published>
+    <updated>2020-07-06T01:18:16.410Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>基本术语</strong></p><p><strong>1.属性/特征（feature）</strong>：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。</p><p><strong>2.特征向量（feature vector）</strong>：假设西瓜有色泽，根蒂，敲声作为三个坐标，则它们张成一个用于描述西瓜的的三维空间，每个西瓜都可以在这个空间找到自己的位置，由于空间内的每个点对应一个坐标向量，因此把（色泽，根蒂，敲声）称为特征向量。</p><p><strong>3.维数</strong>（<strong>dimensionality</strong>）：**某一个样本的特征个数。</p><p><strong>4.训练数据（training data）</strong>：训练过程使用的数据，其中每一个样本成为训练样本，组成的集合成为训练集。</p><p><strong>5.假设（hypothesis）：</strong>学得模型对应了关于数据的某种潜在规律。</p><p><strong>6.真相（ground-truth）：</strong>这种潜在规律自身。</p><p><strong>7.学习过程（training）</strong>：学习过程就是为了找出真相或者逼近真相，所得到的称为学习器或者模型。</p><p><strong>8.标签（label）</strong>：就是示例的结果Y</p><p><strong>9.分类（classification）：</strong>学习任务是预测离散的值Y</p><p><strong>10.回归（regression）：</strong>学习任务是预测连续的值Y</p><p><strong>11.监督学习（supervised）：</strong>训练数据拥有标签信息，如分类，回归</p><p><strong>12.无监督学习（unsupervised）：</strong>训练数据没有标签信息，如聚类</p><p><strong>13.泛化能力（generalization）</strong>：学得的模型适用于新样本的能力。具有强的泛化能力的某型能够很好的适用整个样本空间。</p><p><strong>14.分布（distribution）：</strong>通常假设样本空间中全体服从一个未知的“分布”D，我们获得的每个样本都是独立的从这个分布采样获得的，即独立同分布，训练样本越多，我们得到D的信息就越多，这样就具有跟好的泛化能力。</p><p><strong>假设空间</strong></p><p><strong>归纳</strong>与<strong>演绎</strong>，前者从特殊到一般的泛化过程，即从具体事实归结出一般性规律，后者则是从一般到特殊的“特化”过程，即从基础原理推演出具体情况。</p><p>我们可以把学习过程看做成一个在所有假设组成的空间中进行的搜索过程，搜索目标就是找到与训练集相匹配的假设。假设表示一旦确定，假设空间及其规模也就确定了。例如我们上面的例子，西瓜的色泽，根蒂，敲声为特征，那么假设空间就为</p><p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/5.png" alt></p><p>假设这三种分别为3，2，2，同时还要考虑随便一种都行，以及世界上没有好瓜的空集，那么假设空间的规模就为4<em>3</em>3+1=37.</p><p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/1.png" alt></p><p>当然搜索这个假设空间的策略有很多种，如自顶向下，自底向上等。搜索过程可以不断删掉与正例不一致的假设，与反例一致的假设。</p><p><strong>版本空间</strong>：现实问题面临着很大的假设空间，但学习过程是基于有限样本训练集进行的，因此可能有多个假设与训练集一致，即存在一个与训练集一致的“假设集合”。</p><p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/2.png" alt></p><p><strong>归纳偏好</strong></p><p>这可能是第一章的大坑，归纳偏好简单理解就是学习算法的结果判断必须要有一个明确的衡量方式，机器学习算法在学习过程中对某种类型假设的偏好。</p><p>举个例子，比如说回归的学习图，每一个训练样本对应图中的点（x，y）要学的一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线，显然会有多条，我们的学习算法必须有某种偏好，才能判断出“正确”的模型。</p><p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/3.png" alt></p><p>归纳偏好可以看成学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”。所以可能会有一般性的原则来引导算法确立“正确的价值观”。“<strong>奥卡姆剃刀</strong>”是一种常用的，自然科学研究中最基本的原则，即“<strong>若有多个假设与观察一致，则选择最简单的那个</strong>”。则我们会认为A比B好。当然奥卡姆剃刀也存在着问题，它本身就存在不同的诠释，如西瓜问题，到底哪种假设更“简单”。<strong>在具体问题中，这个假设是否成立，即算法的归纳偏好是否与问题本身相匹配，大多数时候直接决定了算法能否取得好的性能。</strong></p><p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/4.png" alt></p><p>有可能也会出现与A相比，B与训练集外的样本更一致。<strong>“没有免费的午餐”定理（</strong>NFL<strong>）：</strong>无论某一个算法多聪明，某一个算法多笨，他们的期望性能相同。NFL有一个重要的前提就是所有“问题”出现的机会相同，或所有问题同等重要。<strong>其实</strong>NFL<strong>最重要的意义在于，让我们清楚的认识到，脱离具体问题，空谈“什么学习算法更好”毫无意义。因此学习算法自身的归纳偏好与问题是否相配，起到决定性作用。</strong></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;strong&gt;基本术语&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1.属性/特征（feature）&lt;/strong&gt;：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2.特征向量（featur
+      
+    
+    </summary>
+    
+    
+      <category term="人工智能" scheme="https://hongjianyuan.github.io/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    
+      <category term="机器学习" scheme="https://hongjianyuan.github.io/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+      <category term="西瓜书" scheme="https://hongjianyuan.github.io/categories/%E8%A5%BF%E7%93%9C%E4%B9%A6/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</title>
@@ -45,9 +75,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
-    
       <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
+    
+      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
     
     
   </entry>
@@ -145,9 +175,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
-    
       <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
+    
+      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
     
     
   </entry>
