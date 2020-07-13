@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://hongjianyuan.github.io/"/>
-  <updated>2020-07-08T03:20:58.781Z</updated>
+  <updated>2020-07-12T06:17:43.122Z</updated>
   <id>https://hongjianyuan.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>图卷积神经网络介绍</title>
+    <link href="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/"/>
+    <id>https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/</id>
+    <published>2020-07-09T07:15:56.000Z</published>
+    <updated>2020-07-12T06:17:43.122Z</updated>
+    
+    <content type="html"><![CDATA[<p>参考资料：中国科学院计算技术研究所 沈华伟研究员课件</p><p>​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件</p><p>​                    <a href="https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）" target="_blank" rel="noopener">https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）</a></p><h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>目前来说卷积神经网络很好的应用在了图像、音频、视频等欧式数据的分类，检测，分割，语音翻译当中，这是由于CNN的强大之处在于它能够通过局部卷积滤波器学习局部平稳结构并将其组合成多尺度分层的能力，这个就是我们经常说的<strong>平移不变性</strong>，例如，我们在图像上面识别狗，无论输入怎么平移，扭曲，最终识别出来还是狗。那么我们如何将卷积推广到非欧几里得的数据？例如，图的不规则结构对于定义图数据的卷积带来了挑战。</p><p>首先，我们先来简单的理解一下卷积这个概念：卷积就是对两个函数f与g做数学运算，得到第三个函数h，分为</p><p>连续情况:</p><p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/4.JPG" alt></p><p>离散情况(我们经常用在图像就是这个):<br>$$<br>ℎ(𝑥,𝑦)=(𝑓∗𝑔)(𝑥,𝑦)≝ \sum_m𝑓(𝑥−𝑚,𝑦−𝑛)𝑔(𝑚,𝑛)<br>$$</p><h1 id="定义图卷积的两种方式"><a href="#定义图卷积的两种方式" class="headerlink" title="定义图卷积的两种方式"></a>定义图卷积的两种方式</h1><p><strong>两个的本质就是利用GCN提取拓扑图的特征</strong></p><h3 id="空间域（顶点域）"><a href="#空间域（顶点域）" class="headerlink" title="空间域（顶点域）"></a>空间域（顶点域）</h3><p>目标顶点附近所有定点的加权平均函数，也就是直接将卷积操作定义在每个结点的连接关系上，主要挑战在于领域的大小在节点间有显著的变化，例如，幂律度分布。</p><h3 id="频域（谱方法）"><a href="#频域（谱方法）" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h3><p>先通过傅里叶变换在进行卷积，例如论文《Semi-Supervised Classification with Graph Convolutional Networks》这篇文章里面有许多数学公式需要进行推导，过程为1.定义graph上的Fourier Transformation傅里叶变换（利用Spectral graph theory，借助图的拉普拉斯矩阵的特征值和特征向量研究图的性质）2.定义graph上的convolution卷积</p><h2 id="频域（谱方法）-1"><a href="#频域（谱方法）-1" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h2><h3 id="Laplacian-matrix"><a href="#Laplacian-matrix" class="headerlink" title="Laplacian matrix"></a>Laplacian matrix</h3><p><strong>频域的前提条件是无向图。</strong></p><p>拉普拉斯矩阵也叫拉普拉斯算子，主要应用在图论。定义为<strong>L=D-A</strong>，其中L为拉普拉斯矩阵，D为度矩阵（每个顶点的度），A为邻接矩阵。</p><p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/2.png" alt></p><p>相似度：</p><p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/3.png" alt></p><p>标准化之后的拉普拉斯算子：</p><p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/5.JPG" alt></p><p>其中，I是单位矩阵，标准化之后仍然是对称的。</p><h3 id="图切"><a href="#图切" class="headerlink" title="图切"></a>图切</h3><p>1.对于方向图，大多数情况是最小切割和最大流量问题<br>2.对于无向图，大多数情况是：最小割问题，谱聚类</p><p>理论：Maxflow-mincut定理，它指出min-cut等于max-flow，因此，图割对图论至关重要。</p><h3 id="那么为什么要用拉普拉斯矩阵呢？"><a href="#那么为什么要用拉普拉斯矩阵呢？" class="headerlink" title="那么为什么要用拉普拉斯矩阵呢？"></a>那么为什么要用拉普拉斯矩阵呢？</h3><p>1.拉普拉斯是对称矩阵，可以进行谱分解（特征分解）</p><p>2.由于卷积在傅里叶的频域上计算相对简单，所以为了在图上做傅里叶变换，需要找到图的连续的正交基对应傅里叶变换的基，因此要使用拉普拉斯的特征向量。</p><h3 id="谱分解"><a href="#谱分解" class="headerlink" title="谱分解"></a>谱分解</h3><p>谱分解是将矩阵分解为由其特征值和特征向量表示的矩阵之积的方法，<strong>只有对可对角化矩阵或有N个线性无关的特征向量的矩阵才可以以用特征分解。</strong></p><p>所以拉普拉斯矩阵一定可以谱分解，因为是半正定矩阵，并且一定是n个线性无关的特征向量的对称矩阵，对称矩阵的不同特征值对应的特征向量相互正交。</p><p>所以拉普拉斯的谱分解为：</p><p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/6.JPG" alt></p><p>其中U=[u<sub>1</sub>,….u<sub>n</sub>],为正交向量的集合，也由于是正交矩阵，所以<em>L</em>=<em>U</em>Λ<em>U</em><sup>−1</sup>=<em>U</em>Λ<em>U</em><sup>T</sup></p><h3 id="傅里叶变换"><a href="#傅里叶变换" class="headerlink" title="傅里叶变换"></a>傅里叶变换</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;参考资料：中国科学院计算技术研究所 沈华伟研究员课件&lt;/p&gt;
+&lt;p&gt;​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件&lt;/p&gt;
+&lt;p&gt;​                    &lt;a href=&quot;https://blo
+      
+    
+    </summary>
+    
+    
+      <category term="人工智能" scheme="https://hongjianyuan.github.io/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    
+      <category term="计算机视觉" scheme="https://hongjianyuan.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/"/>
+    
+      <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>CGNet: A Light-weight Context Guided Network for Semantic Segmentation</title>
@@ -191,9 +221,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
-    
       <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
+    
+      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
     
     
   </entry>
@@ -291,9 +321,9 @@
     
       <category term="深度学习" scheme="https://hongjianyuan.github.io/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"/>
     
-      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
-    
       <category term="论文" scheme="https://hongjianyuan.github.io/categories/%E8%AE%BA%E6%96%87/"/>
+    
+      <category term="弱监督" scheme="https://hongjianyuan.github.io/categories/%E5%BC%B1%E7%9B%91%E7%9D%A3/"/>
     
     
   </entry>

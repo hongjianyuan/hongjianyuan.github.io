@@ -1,162 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Fully Convolutional Networks for Semantic Segmentation</title>
-    <url>/2020/07/03/FCN/</url>
-    <content><![CDATA[<ul>
-<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
-<li><strong>Publish:</strong> CVPR2015</li>
-<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
-</ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
-<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
-<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
-<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
-<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
-<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
-<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
-<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
-<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
-<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
-<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
-<p><strong>上采样是反卷积</strong></p>
-<p>首先我们来看一下卷积</p>
-<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
-<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>反卷积</p>
-<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
-<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
-<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
-<ol>
-<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
-<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
-<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
-</ol>
-<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
-<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
-<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
-<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
-]]></content>
-      <categories>
-        <category>图像分割</category>
-        <category>人工智能</category>
-        <category>计算机视觉</category>
-        <category>深度学习</category>
-        <category>论文</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</title>
-    <url>/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/</url>
-    <content><![CDATA[<ul>
-<li><strong>Authors:</strong>     Yunchao Wei, Xiaodan Liang, Yunpeng Chen, Xiaohui Shen, Ming-Ming Cheng, Yao Zhao,Shuicheng Yan</li>
-<li><strong>Publish:</strong>       TPMI 2017</li>
-<li><a href="https://arxiv.org/pdf/1509.03150v1.pdf" target="_blank" rel="noopener">LINK</a></li>
-</ul>
-<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p>
-<p>答：训练这样的DCNN通常依赖于大量的具有像素级分割标注的图像，并且注解这些图像在财力和人力两方面都是非常昂贵的。所以作者想要用图像级别的注释被用来学习DCNN的语义分割。</p>
-<p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p>
-<p>答：我们首先用简单图像的显著图（即，具有单个类别的主要对象和干净背景的那些）来训练初始分割网络Initial-DCNN。这些显著图可以通过现有的自下而上的显著物体检测技术自动获得，其中不需要监督信息。然后，基于Initial-DCNN以及图像级注释，在预测的简单图像的分割标注的监督下，学习一个称为Enhanced-DCNN的更好的网络。最后，利用Enhanced-DCNN和图像级注释推导出复杂图像（背景杂乱的两类或多类物体）的更多像素级分割掩模作为监督信息学习Powerful-DCNN语义分割。主要思路就是层层递进。</p>
-<p><strong>3.作者给出的答案是什么？</strong></p>
-<p>答：在PASCAL VOC 2012分割基准上的大量实验结果表明，提出的STC框架大大优于弱监督语义分割的最新算法。</p>
-<h2 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h2><p>为了解决标注大量的像素级掩模通常需要大量的财务费用以及人力，相关研究者们已经提出了一些方法，仅仅使用图像级标签作为监督信息进行语义分割。然而，就我们所知，这些方法的性能远不能令人满意，考虑到语义分割问题的复杂性，如类内高度差异（例如多样的外观，观点和尺度）以及不同的类别、对象之间的相互作用（例如，部分可见性和遮挡），具有图像级注释的复杂损失函数（例如，基于多实例学习的损失函数）由于对分割掩模的内在像素级属性的忽略，可能不足以用于弱监督语义分割。</p>
-<p>在这项工作中，我们基于以下认识（intuition）提出了一个简单到复杂的弱监督分割框架。</p>
-<p>这项工作所做的贡献总结如下：</p>
-<p>（1）我们提出了一个简单到复杂的（STC）框架，能够以弱监督的方式有效地训练分割DCNN（即，仅提供图像级标签）。所提出的框架是通用的，并且可以结合任何最先进的全监督网络结构来学习分割网络。</p>
-<p>（2）引入了一个多标签交叉熵损失函数来训练基于显著图的分割网络，其中每个像素能够以不同的概率自适应地归结于前景类别和背景。</p>
-<p>（3） 我们在PASCAL VOC 2012分割基准上评估我们的方法[24]。 实验结果很好地证明了STC框架的有效性，达到了最先进的实验结果。</p>
-<h2 id="RELATED-WORK"><a href="#RELATED-WORK" class="headerlink" title="RELATED WORK"></a><strong>RELATED WORK</strong></h2><h3 id="Weakly-Supervised-Semantic-Segmentation"><a href="#Weakly-Supervised-Semantic-Segmentation" class="headerlink" title="Weakly Supervised Semantic Segmentation"></a>Weakly Supervised Semantic Segmentation</h3><p>为了减轻像素级掩模标注的负担，已经提出了一些用于语义分割的弱监督方法。通过利用带注释的边界框来估计语义分割。为了进一步减少边界框收集的负担，一些工作提出仅通过使用图像级标签来训练分割网络。</p>
-<h3 id="Self-paced-Learning"><a href="#Self-paced-Learning" class="headerlink" title="Self-paced Learning"></a>Self-paced Learning</h3><p>略。</p>
-<h2 id="PROPOSED-METHOD"><a href="#PROPOSED-METHOD" class="headerlink" title="PROPOSED METHOD"></a>PROPOSED METHOD</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/1.JPG" alt></p>
-<p>（STC）框架的说明。（a） 首先由DRIF生成简单图像的高质量显著性图，作为有监督的前景/背景掩模，利用该损失函数训练初始DCNN。（b） 然后，学习一个更好的增强DCNN，并用初始DCNN预测的分割掩码进行监督。（c） 最后，预测出更多的复杂图像掩模来训练一个更强大的网络，称为强大的DCNN。</p>
-<h2 id="Initial-DCNN"><a href="#Initial-DCNN" class="headerlink" title="Initial-DCNN"></a>Initial-DCNN</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/2.JPG" alt></p>
-<p>对于简单图片，先通过显著图预测出其最显著的区域。对于每个图像生成的显著图，较大像素值意味着这个像素更可能属于前景。上图显示了一些简单的例子图像和相应的显著图由DRFI方法生成。可以观察到，前景像素与语义之间的多个对象存在明显的相关性。由于每个简单的图像伴随着一个语义标签，可以很容易推断出前景候选像素可以分配相应的图像级标签。随后，由一个多标签交叉熵损失函数来训练分割网络，以显著图作为监督信息。</p>
-<p>假设训练集中有C个类。用O<sub>I</sub>= {1,2，…，C}，O<sub>P</sub>= {0,1,2，…，C}分别表示图像级和像素级的类别集标签，其中0表示背景类。分割网络由f(•)过滤，其中所有的卷积层过滤给定的图像I。 f(•)会产生一个h * w * (c+1)维的激活输出，其中h和w分别表示每个通道的特征图的高度以及宽度。我们利用softmax函数对I中属于第k类的每一个像素进行计算，其表述如下:</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/3.JPG" alt></p>
-<p>语义分割的多标签交叉熵损失函数定义为:</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/4.JPG" alt></p>
-<p>p<sup>o</sup><sub>ij</sub>表示（i,j）处的像素属于背景的概率。将这个阶段学习到的分割网络表示为Initial-DCNN（简称I-DCNN）。</p>
-<h3 id="Simple-to-Complex-Framework"><a href="#Simple-to-Complex-Framework" class="headerlink" title="Simple to Complex Framework"></a>Simple to Complex Framework</h3><p>在这一部分中，我们提出了一种迭代训练策略，将更复杂的图像与图像级标签结合起来，以增强DCNN的分割能力。基于训练后的I-DCNN，可以预测图像的分割掩模，从而进一步提高DCNN的分割能力。我们将位置（i，j）处的第k类的预测概率表示为p<sup>k</sup><sub>ij</sub>。然后，通过分割DCNN的位置（i，j）处的像素的估计标记g<sub>ij</sub>可以被描述为</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/5.JPG" alt></p>
-<h4 id="Enhanced-DCNN"><a href="#Enhanced-DCNN" class="headerlink" title="Enhanced-DCNN"></a>Enhanced-DCNN</h4><p>然而，当I-DCNN作为训练DCNN的监督时，来自I-DCNN的错误预测可能会导致语义分割的偏移。幸运的是，对于训练集中的每一个简单图像，给出了图像级别标签，可以用来细化预测的分割掩模。具体地说，如果简单图像I用c（c∈O<sub>I</sub>）标记，则像素的估计标签可以重新表示为</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/6.JPG" alt></p>
-<p>其中0表示背景的类别。这样，可以消除训练集中简单图像的一些错误预测。因此，利用预测的分割掩模作为监督信息，训练出一个更强大的分割DCNN，简称EDCNN。我们用传统的交叉熵损失函数训练E-DCNN，它被全监督方案广泛使用。</p>
-<h4 id="Powerful-DCNN"><a href="#Powerful-DCNN" class="headerlink" title="Powerful-DCNN"></a>Powerful-DCNN</h4><p>在这一阶段中，利用含有更多语义对象和杂乱背景的复杂图像对分割后的DCNN进行训练。与I-DCNN相比，E-DCNN具有更强的语义切分能力，因为它使用了大量的预测分割。虽然E-DCNN是基于简单图像进行训练的，但是这些图像中的语义对象在外观、尺度和视点上都有很大的变化，这与它们在复杂图像中的外观变化是一致的。因此，我们可以应用E-DCNN来预测复杂图像的分割。</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/7.JPG" alt></p>
-<p>式中，Ω表示每个图像I的一组基本真实语义标签（包括背景），我们将在此阶段训练的分割网络表示为强大的DCNN（简称P-DCNN）。为了说明每个步骤的有效性，图3显示了I-DCNN、E-DCNN和P-DCNN生成的一些分割结果。从中可以看出，基于所提出的由简单到复杂的分割框架，分割结果不断得到改善。</p>
-<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/8.JPG" alt></p>
-]]></content>
-      <categories>
-        <category>图像分割</category>
-        <category>人工智能</category>
-        <category>计算机视觉</category>
-        <category>深度学习</category>
-        <category>弱监督</category>
-        <category>论文</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>python-面向对象编程基础</title>
-    <url>/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="面向对象定义"><a href="#面向对象定义" class="headerlink" title="面向对象定义"></a>面向对象定义</h2><p>面向对象编程——Object Oriented Programming，简称OOP，是一种程序设计思想。OOP把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。把一组数据结构和处理它们的方法组成对象（object），把相同行为的对象归纳为类（class），通过类的封装（encapsulation）隐藏内部细节，通过继承（inheritance）实现类的特化（specialization）和泛化（generalization），通过多态（polymorphism）实现基于对象类型的动态分派。在Python中，所有数据类型都可以视为对象，当然也可以自定义对象。自定义的对象数据类型就是面向对象中的类（Class）的概念。</p>
-<h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><p>类是现实世界或思维世界中的实体在计算机中的反映，它将数据以及这些数据上的操作封装在一起。</p>
-<p>对象是具有类类型的变量。类和对象是面向对象编程技术中的最基本的概念。</p>
-<p>面向对象最重要的概念就是类（Class）和实例（Instance），必须牢记类是抽象的模板。</p>
-<p>通常通过class这一个关键字来定义类，并在里面定义方法，通常类名首字母要大写，括号里面的（object）为这个类要继承那个类的名字，如果没有要继承就用默认类object：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># __init__是用于在创建对象时进行初始化操作</span></span><br><span class="line">    <span class="comment"># 通过这个方法我们可以为学生对象定义name和age两个属性</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">     <span class="function"><span class="keyword">def</span> <span class="title">study</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'%s正在看书'</span> % (self.name))</span><br></pre></td></tr></table></figure>
-
-<p>注意到<code>__init__</code>方法的第一个参数永远是<code>self</code>，表示创建的实例本身，因此，在<code>__init__</code>方法内部，就可以把各种属性绑定到<code>self</code>，因为<code>self</code>就指向创建的实例本身。</p>
-<p>和普通的函数相比，在类中定义的函数只有一点不同，就是第一个参数永远是实例变量<code>self</code>，并且，调用时，不用传递该参数。除此之外，类的方法和普通函数没有什么区别，所以，你仍然可以用默认参数、可变参数、关键字参数和命名关键字参数。</p>
-<p>通常类中函数，我们称之为对象的方法。</p>
-<p>定义好类之后，需要创建一个实例来调用它，实例格式 xxx = 类名（参数）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">stu=Student()</span><br><span class="line"><span class="comment">#通过这个实例来调用方法</span></span><br><span class="line">stu.study()</span><br></pre></td></tr></table></figure>
-
-<h2 id="访问的可见性"><a href="#访问的可见性" class="headerlink" title="访问的可见性"></a>访问的可见性</h2><p>类似于java的语言，为了提高封装性和安全性,需要根据实际情况对类的成员的可见性进行约束。</p>
-<p>我们给<code>Student</code>对象绑定的<code>name</code>和<code>age</code>属性到底具有怎样的访问权限（也称为可见性）。因为在很多面向对象编程语言中，我们通常会将对象的属性设置为私有的（private）或受保护的（protected），简单的说就是不允许外界访问，而对象的方法通常都是公开的（public），因为公开的方法就是对象能够接受的消息。在Python中，属性和方法的访问权限只有两种，也就是公开的和私有的，如果希望属性是私有的，在给属性命名时可以用<strong>两个下划线</strong>作为开头，下面的代码可以验证这一点,这样就没办法从外部进行访问。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line">     <span class="function"><span class="keyword">def</span> <span class="title">study</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'%s正在看书'</span> % (self.name))</span><br></pre></td></tr></table></figure>
-
-<p>如果外部代码要获取或者name和age就需要给Student类增加<code>get_name</code>和<code>set_age</code>这样的方法。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_age</span><span class="params">(self, age)</span>:</span></span><br><span class="line">        self.__age = age</span><br></pre></td></tr></table></figure>
-
-<p><strong>在Python中，变量名类似<code>__xxx__</code>的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的</strong></p>
-<p>在实际开发中，我们并不建议将属性设置为私有的，因为这会导致子类无法访问。所以大多数Python程序员会遵循一种命名惯例就是让属性名以单下划线开头来表示属性是受保护的，本类之外的代码在访问这样的属性时应该要保持慎重。这种做法并不是语法上的规则，单下划线开头的属性和方法外界仍然是可以访问的，所以更多的时候它是一种暗示或隐喻。</p>
-<h3 id="面向对象灵魂"><a href="#面向对象灵魂" class="headerlink" title="面向对象灵魂"></a>面向对象灵魂</h3><p>封装、继承、多态</p>
-<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><p>“封装”就是将抽象得到的数据和行为（或功能）相结合，形成一个有机的整体（即类）；封装的目的是增强安全性和简化编程，使用者不必了解具体的实现细节，而只是要通过外部接口，一特定的访问权限来使用类的成员。“隐藏一切可以隐藏的实现细节，只向外界暴露（提供）简单的编程接口”</p>
-<h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><p>继承指的是类与类之间的关系，是一种什么是什么的关系，功能之一就是用来解决代码<strong>重用</strong>问题</p>
-<p>继承是一种创建新类的方式，在python中，新建的类可以继承一个或多个父类，父类又可称为基类或超类，新建的类称为派生类或子类，继承又分为单继承和多继承。</p>
-<p><img src="/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/1.png" alt></p>
-<p>例如我们创建一个动物类：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">		print(<span class="string">"Animal is run!!"</span>)</span><br></pre></td></tr></table></figure>
-
-<p>然后创建狗和猫类来继承：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span><span class="params">(Animal)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'Dog is running...'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span><span class="params">(Animal)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-<p>当子类和父类都存在相同的run()方法时，我们说，子类的run()覆盖了父类的run()，在代码运行的时候，总是会调用子类的run()。</p>
-<p>通过方法重写我们可以让父类的同一个行为在子类中拥有不同的实现版本，当我们调用这个经过子类重写的方法时，不同的子类对象会表现出不同的行为，这个就是多态（poly-morphism）。</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>python-面向对象进阶</title>
-    <url>/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[<h2 id="slots"><a href="#slots" class="headerlink" title="slots"></a><strong><strong>slots</strong></strong></h2><p>Python是一门动态语言。通常，动态语言允许我们在程序运行时给对象绑定新的属性或方法，当然也可以对已经绑定的属性和方法进行解绑定。但是如果我们需要限定自定义类型的对象只能绑定某些属性，可以通过在类中定义<strong>slots</strong>变量来进行限定。<strong>需要注意的是slots的限定只对当前类的对象生效，对子类并不起任何作用。</strong>除非在子类中也定义<code>__slots__</code>，这样，子类实例允许定义的属性就是自身的<code>__slots__</code>加上父类的<code>__slots__</code>。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    __slots__ = (<span class="string">'name'</span>, <span class="string">'age'</span>) <span class="comment"># 用tuple定义允许绑定的属性名称</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Student() <span class="comment"># 创建新的实例</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.name = <span class="string">'Michael'</span> <span class="comment"># 绑定属性'name'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.age = <span class="number">25</span> <span class="comment"># 绑定属性'age'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.score = <span class="number">99</span> <span class="comment"># 绑定属性'score'</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">AttributeError: <span class="string">'Student'</span> object has no attribute <span class="string">'score'</span></span><br></pre></td></tr></table></figure>
-
-<p>因为score并没有在slots里面，所以被限定绑定属性。</p>
-<h2 id="使用-property"><a href="#使用-property" class="headerlink" title="使用@property"></a>使用@property</h2><p>之前我们讨论过Python中属性和方法访问权限的问题，虽然我们不建议将属性设置为私有的，但是如果直接将属性暴露给外界也是有问题的，比如我们没有办法检查赋给属性的值是否有效。那么如果想访问属性可以通过属性的getter（访问器）和setter（修改器）方法进行对应的操作。如果要做到这点，就可以考虑使用@property包装器来包装getter和setter方法，使得对属性的访问既安全又方便。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._birth</span><br><span class="line"></span><br><span class="line"><span class="meta">    @birth.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        self._birth = value</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">age</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">2015</span> - self._birth</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-  </entry>
-  <entry>
     <title>BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation</title>
     <url>/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/</url>
     <content><![CDATA[<ul>
@@ -201,104 +45,49 @@
       </categories>
   </entry>
   <entry>
-    <title>卷积神经网络（CNN）讲解</title>
-    <url>/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/</url>
-    <content><![CDATA[<p>本文主要是对于花书的第9章《卷积网络》所做的笔记，并且结合网络上相关资料，侵删。</p>
-<p><strong>卷积神经网络</strong>（Convolutional neural network，CNN）（LeCun，1989），是一种专门处理用来具有类似网格结构的数据的神经网络。例如时间序列数据（一维）或者图像数据（二维），在诸多应用领域都表现优异。卷积是一种特殊的线性运算，是指那些至少在网络的一层中使用卷积运算来代替一般的矩阵乘法运算的神经网络。</p>
-<h3 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h3><p>例子引入：假设我们正在用激光传感器追踪一艘宇宙飞船的位置。我们的激光传感器给出一个单独的输出x(t)，表示宇宙飞船在时刻t 的位置。x 和t 都是实值的，这意味着我们可以在任意时刻从传感器中读出飞船的位置。现在假设我们的传感器含有噪声。为了得到飞船位置的低噪声估计，我们对得到的测量结果进行平均。显然，时间上越近的测量结果越相关，所以我们采用一种加权平均的方法，对于最近的测量结果赋予更高的权值。我们可以采用一个加权函数w(a) 来实现，其中a 表示测量结果据当前时刻的时间间隔。如果我们对任意时刻都采用这种加权平均的操作，就得到了对于飞船位置的连续估计函数s：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/1.JPG" alt></p>
-<p>这种运算就叫做卷积(convolution)。卷积运算通常用星号表示：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/2.JPG" alt></p>
-<p>在卷积神经网络的术语中，第一个参数（在这个例子中，函数x）叫做<strong>输入</strong>(input)，第二个参数（函数w）叫做<strong>核函数</strong>(kernel function)。输出有时被称作<strong>特征映射</strong>（feature map）。</p>
-<p>核函数的定义：<strong>对于输入图像中的一部分区域，进行加权求和的处理，其中这个过程的权重，由一个函数定义，这个函数就是卷积核</strong></p>
-<p>在我们的例子中，连续时间是不现实的，通常采用离散时间（就是每隔几秒反馈一次），所以时间t 只能<br>取整数值。如果我们假设x 和w 都定义在整数时刻t 上，就得到了离散形式的卷积：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/3.JPG" alt></p>
-<p>在机器学习的应用中，输入通常是高维数据数组，而核也是由算法产生的高维参数数组。我们把这种高维数组叫做张量。因为输入与核的每一个元素都分开存储，我们经常假设在存储了数据的有限点集以外，这些函数的值都为零。这意味着在实际操作中，我们可以统一地把无限的求和当作对有限个数组元素的求和来用。</p>
-<p>如果把二维的图像I 作为输入，我们也相应的需要使用二维的核K：</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/4.JPG" alt></p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/5.JPG" alt></p>
-<p>上图展示了一个在二维张量上的卷积运算的例子。是不是这张图比较难以理解，我们放在动图帮助理解。</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/11.gif" alt></p>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>卷积运算通过三个重要的思想来帮助改进机器学习系统：稀疏交互(sparse interactions)、参数共享(parameter sharing)、等变表示(equivariant representations)。</p>
-<h4 id="稀疏交互"><a href="#稀疏交互" class="headerlink" title="稀疏交互"></a>稀疏交互</h4><p>卷积神经网络具有稀疏交互(sparse interactions)（也叫做稀疏连接(sparse connectivity) 或者稀疏权重(sparse weights)）的特征。这通过使得核的规模远小于输入的规模来实现。</p>
-<h4 id="参数共享"><a href="#参数共享" class="headerlink" title="参数共享"></a>参数共享</h4><p>在卷积神经网络中，核的每一个元素都作用在输入的每一个位置。卷积运算中的参数共享保证了我们只需要学习一个参数集合，而不是对于每一个位置都需要学习一个单独的参数集合。</p>
-<h4 id="等变"><a href="#等变" class="headerlink" title="等变"></a>等变</h4><p>对于卷积，参数共享的特殊形式是的神经网络具有对平移等变得性质。如果一个函数满足输入改变，输出也以同样的方式改变这一性质，我们就说它是等变的。</p>
-<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化函数使用某一位置的相邻输出的总体统计特征来代替网络在该位置的输出。</p>
-<p><strong>最大池化(max pooling)</strong> 函数(Zhou and Chellappa, 1988) 给出相邻矩形区域内的最大值。</p>
-<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/8.jpg" alt></p>
-<p>其他常用的池化函数包括相邻矩形区域内的平均值、L2 范数以及依靠据中心像素距离的加权平均函数。不管采用什么样的池化函数，当输入作出少量平移时，池化能帮助我们的表示近似不变(invariant)。</p>
-<h3 id="卷积与池化作为一种无限强的先验"><a href="#卷积与池化作为一种无限强的先验" class="headerlink" title="卷积与池化作为一种无限强的先验"></a>卷积与池化作为一种无限强的先验</h3><p>先验被认为是强或者弱取决于先验中概率密度的集中程度。弱先验具有较高的熵值，例如方差很大的高斯分布，这样的先验允许数据对于参数的改变具有或多或少的自由性。强先验具有较低的熵值，例如方差很小的高斯分布，样的先验在决定参数最终取值时起着更加积极的作用。</p>
-<p>但把卷积神经网络想成具有无限强先验的全连接网络可以帮助我们更好地洞察卷积神经网络是如何工作的。其中一个关键的洞察是卷积和池化可能导致欠拟合。另一个关键洞察是当我们比较卷积模型的统计学习表现时，只能以基准中的其他卷积模型作为比较的对象。</p>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><table>
-<thead>
-<tr>
-<th></th>
-<th>单通道</th>
-<th>多通道</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1 维</td>
-<td>音频波形：卷积的轴对应于时间。我们将时间离散化并且在每个时间点测量一次波形的振幅</td>
-<td>骨架动画(skeleton animation) 数据：计算机渲染的3D 角色动画是通过随时间调整‘‘骨架’’ 的姿势而生成的。在每个时间点，角色的姿势通过骨架中的每个关节的角度来描述。我们输入到卷积模型的数据的每个通道，表示一个关节的关于一个轴的角度。</td>
-</tr>
-<tr>
-<td>2 维</td>
-<td>已经用傅立叶变换预处理的音频数据：我们可以将音频波形变换成2 维张量，不同的行对应不同的频率，不同的列对应不同的时间点。在时间轴上使用卷积使模型等效于在时间上移动。在频率轴上使用卷积使得模型等效于在频率上移动，这使得在不同八度音阶中播放的相同旋律产生相同的表示，但处于网络输出中的不同高度。</td>
-<td>彩色图像数据：其中一个通道包含红色像素，另一个包含绿色像素，最后一个包含蓝色像素。在图像的水平轴和竖直轴上移动卷积核，赋予了两个方向上平移等变性。</td>
-</tr>
-<tr>
-<td>3 维</td>
-<td>体积数据：这种数据一般来源于医学成像技术，例如CT 扫描等。</td>
-<td>彩色视频数据：其中一个轴对应着时间，另一个轴对应着视频帧的高度，最后一个对应着视频帧的宽度。</td>
-</tr>
-</tbody></table>
+    <title>Fully Convolutional Networks for Semantic Segmentation</title>
+    <url>/2020/07/03/FCN/</url>
+    <content><![CDATA[<ul>
+<li><strong>Authors:</strong>     Jonathan Long，Evan Shelhamer，Trevor Darrell</li>
+<li><strong>Publish:</strong> CVPR2015</li>
+<li><a href="https://arxiv.org/pdf/1411.4038.pdf" target="_blank" rel="noopener">Link</a></li>
+</ul>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>1.建立一个全卷积的神经网路。</p>
+<p>2.输入任意尺寸，经过有效的推理和学习产生相应尺寸的输出。</p>
+<p>3.定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>首次运用全卷积进行预测</p>
+<p>在网络中上采样层进行像素级别预测，而下采样池化来进行学习。</p>
+<p>将FCN通过经典的CNN分类网络（VGG）进行改造并且微调。</p>
+<p>语义分割面临着语义和定位的两难问题。全局信息解决的是什么，定位信息解决的是在哪里。</p>
+<p>定义了一个跳跃式的架构，结合来自深度网络层语义信息和来自原始网络表征信息来产生准确的分割。</p>
+<p><img src="/2020/07/03/FCN/FCN1.png" alt></p>
+<h3 id="Fully-convolutional-networks："><a href="#Fully-convolutional-networks：" class="headerlink" title="Fully convolutional networks："></a><strong>Fully convolutional networks：</strong></h3><p>卷积网的每层数据是一个h * w * d的三维数组，其中h和w是空间维度,d是特征或通道维数。第一层是像素尺寸为h * w、颜色通道数为d的图像。高层中的locations和图像中它们连通的locations相对应，被称为接收域。</p>
+<p><img src="/2020/07/03/FCN/FCN2.png" alt></p>
+<p>这些完全连接的层也可以被视为与覆盖整个输入区域的内核的卷积。 这样做将它们转换为完全卷积网络，可以输入任意大小和输出分类图</p>
+<p><strong>上采样是反卷积</strong></p>
+<p>首先我们来看一下卷积</p>
+<p>其中蓝色的图片(4 * 4)表示的是进行卷积的图片，阴影的图片(3 * 3)表示的是卷积核，绿色的图片(2*2)表示是进行卷积计算之后的图片。</p>
+<p><img src="/2020/07/03/FCN/%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>反卷积</p>
+<p><img src="/2020/07/03/FCN/%E5%8F%8D%E5%8D%B7%E7%A7%AF.gif" alt></p>
+<p>乍看一下好像反卷积和卷积的工作过程差不多，主要的区别在于反卷积输出图片的尺寸会大于输入图片的尺寸，通过增加padding来实现这一操作，上图展示的是一个strides(步长)为1的反卷积。FCN首先对特征图各神经元之间进行0填充，即上池化；然后再进行卷积运算。计算公式为：(W1−1)×S-2×P+F=W2，根据前一池化层上采样的结合实现像素的密集预测</p>
+<p><img src="/2020/07/03/FCN/FCN3.jpg" alt></p>
+<ol>
+<li>对于FCN-32s，直接对pool5 feature进行32倍上采样获得32x upsampled     feature，再对32x upsampled feature每个点做softmax prediction获得32x upsampled     feature prediction（即分割图）。</li>
+<li>对于FCN-16s，首先对pool5     feature进行2倍上采样获得2x upsampled feature，再把pool4 feature和2x upsampled feature逐点相加，然后对相加的feature进行16倍上采样，并softmax     prediction，获得16x upsampled feature prediction。</li>
+<li>对于FCN-8s，首先进行pool4+2x     upsampled feature逐点相加，然后又进行pool3+2x     upsampled逐点相加，即进行更多次特征融合。</li>
+</ol>
+<p>作者在原文种给出3种网络结果对比，效果：FCN-32s &lt; FCN-16s &lt; FCN-8s，即使用多层feature融合有利于提高分割准确性。</p>
+<p>如果不在conv1_1加入pad=100，那么对于小于192x192的输入图像，在反卷积恢复尺寸前已经feature map size = 0！所以在conv1_1添加pad=100的方法，解决输入图像大小的问题（但是实际也引入很大的噪声）。</p>
+<p>由于FCN在conv1_1加入pad=100，同时fc6卷积层也会改变feature map尺寸，那么真实的网络就不可能像原理图3那样“完美1/2”。</p>
+<p>那么在特征融合的时候，如何保证逐点相加的feature map是一样大的呢？这就要引入crop层了。</p>
 ]]></content>
       <categories>
+        <category>图像分割</category>
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>《机器学习-周志华》-绪论</title>
-    <url>/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/</url>
-    <content><![CDATA[<p><strong>基本术语</strong></p>
-<p><strong>1.属性/特征（feature）</strong>：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。</p>
-<p><strong>2.特征向量（feature vector）</strong>：假设西瓜有色泽，根蒂，敲声作为三个坐标，则它们张成一个用于描述西瓜的的三维空间，每个西瓜都可以在这个空间找到自己的位置，由于空间内的每个点对应一个坐标向量，因此把（色泽，根蒂，敲声）称为特征向量。</p>
-<p><strong>3.维数</strong>（<strong>dimensionality</strong>）：**某一个样本的特征个数。</p>
-<p><strong>4.训练数据（training data）</strong>：训练过程使用的数据，其中每一个样本成为训练样本，组成的集合成为训练集。</p>
-<p><strong>5.假设（hypothesis）：</strong>学得模型对应了关于数据的某种潜在规律。</p>
-<p><strong>6.真相（ground-truth）：</strong>这种潜在规律自身。</p>
-<p><strong>7.学习过程（training）</strong>：学习过程就是为了找出真相或者逼近真相，所得到的称为学习器或者模型。</p>
-<p><strong>8.标签（label）</strong>：就是示例的结果Y</p>
-<p><strong>9.分类（classification）：</strong>学习任务是预测离散的值Y</p>
-<p><strong>10.回归（regression）：</strong>学习任务是预测连续的值Y</p>
-<p><strong>11.监督学习（supervised）：</strong>训练数据拥有标签信息，如分类，回归</p>
-<p><strong>12.无监督学习（unsupervised）：</strong>训练数据没有标签信息，如聚类</p>
-<p><strong>13.泛化能力（generalization）</strong>：学得的模型适用于新样本的能力。具有强的泛化能力的某型能够很好的适用整个样本空间。</p>
-<p><strong>14.分布（distribution）：</strong>通常假设样本空间中全体服从一个未知的“分布”D，我们获得的每个样本都是独立的从这个分布采样获得的，即独立同分布，训练样本越多，我们得到D的信息就越多，这样就具有跟好的泛化能力。</p>
-<p><strong>假设空间</strong></p>
-<p><strong>归纳</strong>与<strong>演绎</strong>，前者从特殊到一般的泛化过程，即从具体事实归结出一般性规律，后者则是从一般到特殊的“特化”过程，即从基础原理推演出具体情况。</p>
-<p>我们可以把学习过程看做成一个在所有假设组成的空间中进行的搜索过程，搜索目标就是找到与训练集相匹配的假设。假设表示一旦确定，假设空间及其规模也就确定了。例如我们上面的例子，西瓜的色泽，根蒂，敲声为特征，那么假设空间就为</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/5.png" alt></p>
-<p>假设这三种分别为3，2，2，同时还要考虑随便一种都行，以及世界上没有好瓜的空集，那么假设空间的规模就为4<em>3</em>3+1=37.</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/1.png" alt></p>
-<p>当然搜索这个假设空间的策略有很多种，如自顶向下，自底向上等。搜索过程可以不断删掉与正例不一致的假设，与反例一致的假设。</p>
-<p><strong>版本空间</strong>：现实问题面临着很大的假设空间，但学习过程是基于有限样本训练集进行的，因此可能有多个假设与训练集一致，即存在一个与训练集一致的“假设集合”。</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/2.png" alt></p>
-<p><strong>归纳偏好</strong></p>
-<p>这可能是第一章的大坑，归纳偏好简单理解就是学习算法的结果判断必须要有一个明确的衡量方式，机器学习算法在学习过程中对某种类型假设的偏好。</p>
-<p>举个例子，比如说回归的学习图，每一个训练样本对应图中的点（x，y）要学的一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线，显然会有多条，我们的学习算法必须有某种偏好，才能判断出“正确”的模型。</p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/3.png" alt></p>
-<p>归纳偏好可以看成学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”。所以可能会有一般性的原则来引导算法确立“正确的价值观”。“<strong>奥卡姆剃刀</strong>”是一种常用的，自然科学研究中最基本的原则，即“<strong>若有多个假设与观察一致，则选择最简单的那个</strong>”。则我们会认为A比B好。当然奥卡姆剃刀也存在着问题，它本身就存在不同的诠释，如西瓜问题，到底哪种假设更“简单”。<strong>在具体问题中，这个假设是否成立，即算法的归纳偏好是否与问题本身相匹配，大多数时候直接决定了算法能否取得好的性能。</strong></p>
-<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/4.png" alt></p>
-<p>有可能也会出现与A相比，B与训练集外的样本更一致。<strong>“没有免费的午餐”定理（</strong>NFL<strong>）：</strong>无论某一个算法多聪明，某一个算法多笨，他们的期望性能相同。NFL有一个重要的前提就是所有“问题”出现的机会相同，或所有问题同等重要。<strong>其实</strong>NFL<strong>最重要的意义在于，让我们清楚的认识到，脱离具体问题，空谈“什么学习算法更好”毫无意义。因此学习算法自身的归纳偏好与问题是否相配，起到决定性作用。</strong></p>
-]]></content>
-      <categories>
-        <category>人工智能</category>
-        <category>机器学习</category>
-        <category>西瓜书</category>
+        <category>论文</category>
       </categories>
   </entry>
   <entry>
@@ -367,8 +156,101 @@
         <category>人工智能</category>
         <category>计算机视觉</category>
         <category>深度学习</category>
-        <category>弱监督</category>
         <category>论文</category>
+        <category>弱监督</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</title>
+    <url>/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/</url>
+    <content><![CDATA[<ul>
+<li><strong>Authors:</strong>     Yunchao Wei, Xiaodan Liang, Yunpeng Chen, Xiaohui Shen, Ming-Ming Cheng, Yao Zhao,Shuicheng Yan</li>
+<li><strong>Publish:</strong>       TPMI 2017</li>
+<li><a href="https://arxiv.org/pdf/1509.03150v1.pdf" target="_blank" rel="noopener">LINK</a></li>
+</ul>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p><strong>1.作者想解决什么问题？</strong></p>
+<p>答：训练这样的DCNN通常依赖于大量的具有像素级分割标注的图像，并且注解这些图像在财力和人力两方面都是非常昂贵的。所以作者想要用图像级别的注释被用来学习DCNN的语义分割。</p>
+<p><strong>2.作者通过什么理论/模型来解决这个问题？</strong></p>
+<p>答：我们首先用简单图像的显著图（即，具有单个类别的主要对象和干净背景的那些）来训练初始分割网络Initial-DCNN。这些显著图可以通过现有的自下而上的显著物体检测技术自动获得，其中不需要监督信息。然后，基于Initial-DCNN以及图像级注释，在预测的简单图像的分割标注的监督下，学习一个称为Enhanced-DCNN的更好的网络。最后，利用Enhanced-DCNN和图像级注释推导出复杂图像（背景杂乱的两类或多类物体）的更多像素级分割掩模作为监督信息学习Powerful-DCNN语义分割。主要思路就是层层递进。</p>
+<p><strong>3.作者给出的答案是什么？</strong></p>
+<p>答：在PASCAL VOC 2012分割基准上的大量实验结果表明，提出的STC框架大大优于弱监督语义分割的最新算法。</p>
+<h2 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h2><p>为了解决标注大量的像素级掩模通常需要大量的财务费用以及人力，相关研究者们已经提出了一些方法，仅仅使用图像级标签作为监督信息进行语义分割。然而，就我们所知，这些方法的性能远不能令人满意，考虑到语义分割问题的复杂性，如类内高度差异（例如多样的外观，观点和尺度）以及不同的类别、对象之间的相互作用（例如，部分可见性和遮挡），具有图像级注释的复杂损失函数（例如，基于多实例学习的损失函数）由于对分割掩模的内在像素级属性的忽略，可能不足以用于弱监督语义分割。</p>
+<p>在这项工作中，我们基于以下认识（intuition）提出了一个简单到复杂的弱监督分割框架。</p>
+<p>这项工作所做的贡献总结如下：</p>
+<p>（1）我们提出了一个简单到复杂的（STC）框架，能够以弱监督的方式有效地训练分割DCNN（即，仅提供图像级标签）。所提出的框架是通用的，并且可以结合任何最先进的全监督网络结构来学习分割网络。</p>
+<p>（2）引入了一个多标签交叉熵损失函数来训练基于显著图的分割网络，其中每个像素能够以不同的概率自适应地归结于前景类别和背景。</p>
+<p>（3） 我们在PASCAL VOC 2012分割基准上评估我们的方法[24]。 实验结果很好地证明了STC框架的有效性，达到了最先进的实验结果。</p>
+<h2 id="RELATED-WORK"><a href="#RELATED-WORK" class="headerlink" title="RELATED WORK"></a><strong>RELATED WORK</strong></h2><h3 id="Weakly-Supervised-Semantic-Segmentation"><a href="#Weakly-Supervised-Semantic-Segmentation" class="headerlink" title="Weakly Supervised Semantic Segmentation"></a>Weakly Supervised Semantic Segmentation</h3><p>为了减轻像素级掩模标注的负担，已经提出了一些用于语义分割的弱监督方法。通过利用带注释的边界框来估计语义分割。为了进一步减少边界框收集的负担，一些工作提出仅通过使用图像级标签来训练分割网络。</p>
+<h3 id="Self-paced-Learning"><a href="#Self-paced-Learning" class="headerlink" title="Self-paced Learning"></a>Self-paced Learning</h3><p>略。</p>
+<h2 id="PROPOSED-METHOD"><a href="#PROPOSED-METHOD" class="headerlink" title="PROPOSED METHOD"></a>PROPOSED METHOD</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/1.JPG" alt></p>
+<p>（STC）框架的说明。（a） 首先由DRIF生成简单图像的高质量显著性图，作为有监督的前景/背景掩模，利用该损失函数训练初始DCNN。（b） 然后，学习一个更好的增强DCNN，并用初始DCNN预测的分割掩码进行监督。（c） 最后，预测出更多的复杂图像掩模来训练一个更强大的网络，称为强大的DCNN。</p>
+<h2 id="Initial-DCNN"><a href="#Initial-DCNN" class="headerlink" title="Initial-DCNN"></a>Initial-DCNN</h2><p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/2.JPG" alt></p>
+<p>对于简单图片，先通过显著图预测出其最显著的区域。对于每个图像生成的显著图，较大像素值意味着这个像素更可能属于前景。上图显示了一些简单的例子图像和相应的显著图由DRFI方法生成。可以观察到，前景像素与语义之间的多个对象存在明显的相关性。由于每个简单的图像伴随着一个语义标签，可以很容易推断出前景候选像素可以分配相应的图像级标签。随后，由一个多标签交叉熵损失函数来训练分割网络，以显著图作为监督信息。</p>
+<p>假设训练集中有C个类。用O<sub>I</sub>= {1,2，…，C}，O<sub>P</sub>= {0,1,2，…，C}分别表示图像级和像素级的类别集标签，其中0表示背景类。分割网络由f(•)过滤，其中所有的卷积层过滤给定的图像I。 f(•)会产生一个h * w * (c+1)维的激活输出，其中h和w分别表示每个通道的特征图的高度以及宽度。我们利用softmax函数对I中属于第k类的每一个像素进行计算，其表述如下:</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/3.JPG" alt></p>
+<p>语义分割的多标签交叉熵损失函数定义为:</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/4.JPG" alt></p>
+<p>p<sup>o</sup><sub>ij</sub>表示（i,j）处的像素属于背景的概率。将这个阶段学习到的分割网络表示为Initial-DCNN（简称I-DCNN）。</p>
+<h3 id="Simple-to-Complex-Framework"><a href="#Simple-to-Complex-Framework" class="headerlink" title="Simple to Complex Framework"></a>Simple to Complex Framework</h3><p>在这一部分中，我们提出了一种迭代训练策略，将更复杂的图像与图像级标签结合起来，以增强DCNN的分割能力。基于训练后的I-DCNN，可以预测图像的分割掩模，从而进一步提高DCNN的分割能力。我们将位置（i，j）处的第k类的预测概率表示为p<sup>k</sup><sub>ij</sub>。然后，通过分割DCNN的位置（i，j）处的像素的估计标记g<sub>ij</sub>可以被描述为</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/5.JPG" alt></p>
+<h4 id="Enhanced-DCNN"><a href="#Enhanced-DCNN" class="headerlink" title="Enhanced-DCNN"></a>Enhanced-DCNN</h4><p>然而，当I-DCNN作为训练DCNN的监督时，来自I-DCNN的错误预测可能会导致语义分割的偏移。幸运的是，对于训练集中的每一个简单图像，给出了图像级别标签，可以用来细化预测的分割掩模。具体地说，如果简单图像I用c（c∈O<sub>I</sub>）标记，则像素的估计标签可以重新表示为</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/6.JPG" alt></p>
+<p>其中0表示背景的类别。这样，可以消除训练集中简单图像的一些错误预测。因此，利用预测的分割掩模作为监督信息，训练出一个更强大的分割DCNN，简称EDCNN。我们用传统的交叉熵损失函数训练E-DCNN，它被全监督方案广泛使用。</p>
+<h4 id="Powerful-DCNN"><a href="#Powerful-DCNN" class="headerlink" title="Powerful-DCNN"></a>Powerful-DCNN</h4><p>在这一阶段中，利用含有更多语义对象和杂乱背景的复杂图像对分割后的DCNN进行训练。与I-DCNN相比，E-DCNN具有更强的语义切分能力，因为它使用了大量的预测分割。虽然E-DCNN是基于简单图像进行训练的，但是这些图像中的语义对象在外观、尺度和视点上都有很大的变化，这与它们在复杂图像中的外观变化是一致的。因此，我们可以应用E-DCNN来预测复杂图像的分割。</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/7.JPG" alt></p>
+<p>式中，Ω表示每个图像I的一组基本真实语义标签（包括背景），我们将在此阶段训练的分割网络表示为强大的DCNN（简称P-DCNN）。为了说明每个步骤的有效性，图3显示了I-DCNN、E-DCNN和P-DCNN生成的一些分割结果。从中可以看出，基于所提出的由简单到复杂的分割框架，分割结果不断得到改善。</p>
+<p><img src="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/8.JPG" alt></p>
+]]></content>
+      <categories>
+        <category>图像分割</category>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
+        <category>论文</category>
+        <category>弱监督</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>python-面向对象编程基础</title>
+    <url>/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="面向对象定义"><a href="#面向对象定义" class="headerlink" title="面向对象定义"></a>面向对象定义</h2><p>面向对象编程——Object Oriented Programming，简称OOP，是一种程序设计思想。OOP把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。把一组数据结构和处理它们的方法组成对象（object），把相同行为的对象归纳为类（class），通过类的封装（encapsulation）隐藏内部细节，通过继承（inheritance）实现类的特化（specialization）和泛化（generalization），通过多态（polymorphism）实现基于对象类型的动态分派。在Python中，所有数据类型都可以视为对象，当然也可以自定义对象。自定义的对象数据类型就是面向对象中的类（Class）的概念。</p>
+<h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><p>类是现实世界或思维世界中的实体在计算机中的反映，它将数据以及这些数据上的操作封装在一起。</p>
+<p>对象是具有类类型的变量。类和对象是面向对象编程技术中的最基本的概念。</p>
+<p>面向对象最重要的概念就是类（Class）和实例（Instance），必须牢记类是抽象的模板。</p>
+<p>通常通过class这一个关键字来定义类，并在里面定义方法，通常类名首字母要大写，括号里面的（object）为这个类要继承那个类的名字，如果没有要继承就用默认类object：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="comment"># __init__是用于在创建对象时进行初始化操作</span></span><br><span class="line">    <span class="comment"># 通过这个方法我们可以为学生对象定义name和age两个属性</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">     <span class="function"><span class="keyword">def</span> <span class="title">study</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'%s正在看书'</span> % (self.name))</span><br></pre></td></tr></table></figure>
+
+<p>注意到<code>__init__</code>方法的第一个参数永远是<code>self</code>，表示创建的实例本身，因此，在<code>__init__</code>方法内部，就可以把各种属性绑定到<code>self</code>，因为<code>self</code>就指向创建的实例本身。</p>
+<p>和普通的函数相比，在类中定义的函数只有一点不同，就是第一个参数永远是实例变量<code>self</code>，并且，调用时，不用传递该参数。除此之外，类的方法和普通函数没有什么区别，所以，你仍然可以用默认参数、可变参数、关键字参数和命名关键字参数。</p>
+<p>通常类中函数，我们称之为对象的方法。</p>
+<p>定义好类之后，需要创建一个实例来调用它，实例格式 xxx = 类名（参数）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">stu=Student()</span><br><span class="line"><span class="comment">#通过这个实例来调用方法</span></span><br><span class="line">stu.study()</span><br></pre></td></tr></table></figure>
+
+<h2 id="访问的可见性"><a href="#访问的可见性" class="headerlink" title="访问的可见性"></a>访问的可见性</h2><p>类似于java的语言，为了提高封装性和安全性,需要根据实际情况对类的成员的可见性进行约束。</p>
+<p>我们给<code>Student</code>对象绑定的<code>name</code>和<code>age</code>属性到底具有怎样的访问权限（也称为可见性）。因为在很多面向对象编程语言中，我们通常会将对象的属性设置为私有的（private）或受保护的（protected），简单的说就是不允许外界访问，而对象的方法通常都是公开的（public），因为公开的方法就是对象能够接受的消息。在Python中，属性和方法的访问权限只有两种，也就是公开的和私有的，如果希望属性是私有的，在给属性命名时可以用<strong>两个下划线</strong>作为开头，下面的代码可以验证这一点,这样就没办法从外部进行访问。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line">     <span class="function"><span class="keyword">def</span> <span class="title">study</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'%s正在看书'</span> % (self.name))</span><br></pre></td></tr></table></figure>
+
+<p>如果外部代码要获取或者name和age就需要给Student类增加<code>get_name</code>和<code>set_age</code>这样的方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, age)</span>:</span></span><br><span class="line">        self.__name = name</span><br><span class="line">        self.__age = age</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__name</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_age</span><span class="params">(self, age)</span>:</span></span><br><span class="line">        self.__age = age</span><br></pre></td></tr></table></figure>
+
+<p><strong>在Python中，变量名类似<code>__xxx__</code>的，也就是以双下划线开头，并且以双下划线结尾的，是特殊变量，特殊变量是可以直接访问的</strong></p>
+<p>在实际开发中，我们并不建议将属性设置为私有的，因为这会导致子类无法访问。所以大多数Python程序员会遵循一种命名惯例就是让属性名以单下划线开头来表示属性是受保护的，本类之外的代码在访问这样的属性时应该要保持慎重。这种做法并不是语法上的规则，单下划线开头的属性和方法外界仍然是可以访问的，所以更多的时候它是一种暗示或隐喻。</p>
+<h3 id="面向对象灵魂"><a href="#面向对象灵魂" class="headerlink" title="面向对象灵魂"></a>面向对象灵魂</h3><p>封装、继承、多态</p>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><p>“封装”就是将抽象得到的数据和行为（或功能）相结合，形成一个有机的整体（即类）；封装的目的是增强安全性和简化编程，使用者不必了解具体的实现细节，而只是要通过外部接口，一特定的访问权限来使用类的成员。“隐藏一切可以隐藏的实现细节，只向外界暴露（提供）简单的编程接口”</p>
+<h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><p>继承指的是类与类之间的关系，是一种什么是什么的关系，功能之一就是用来解决代码<strong>重用</strong>问题</p>
+<p>继承是一种创建新类的方式，在python中，新建的类可以继承一个或多个父类，父类又可称为基类或超类，新建的类称为派生类或子类，继承又分为单继承和多继承。</p>
+<p><img src="/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/1.png" alt></p>
+<p>例如我们创建一个动物类：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Animal</span><span class="params">(object)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">		print(<span class="string">"Animal is run!!"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>然后创建狗和猫类来继承：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span><span class="params">(Animal)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        print(<span class="string">'Dog is running...'</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span><span class="params">(Animal)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>当子类和父类都存在相同的run()方法时，我们说，子类的run()覆盖了父类的run()，在代码运行的时候，总是会调用子类的run()。</p>
+<p>通过方法重写我们可以让父类的同一个行为在子类中拥有不同的实现版本，当我们调用这个经过子类重写的方法时，不同的子类对象会表现出不同的行为，这个就是多态（poly-morphism）。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
       </categories>
   </entry>
   <entry>
@@ -423,6 +305,162 @@
         <category>计算机视觉</category>
         <category>深度学习</category>
         <category>论文</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>python-面向对象进阶</title>
+    <url>/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[<h2 id="slots"><a href="#slots" class="headerlink" title="slots"></a><strong><strong>slots</strong></strong></h2><p>Python是一门动态语言。通常，动态语言允许我们在程序运行时给对象绑定新的属性或方法，当然也可以对已经绑定的属性和方法进行解绑定。但是如果我们需要限定自定义类型的对象只能绑定某些属性，可以通过在类中定义<strong>slots</strong>变量来进行限定。<strong>需要注意的是slots的限定只对当前类的对象生效，对子类并不起任何作用。</strong>除非在子类中也定义<code>__slots__</code>，这样，子类实例允许定义的属性就是自身的<code>__slots__</code>加上父类的<code>__slots__</code>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line">    __slots__ = (<span class="string">'name'</span>, <span class="string">'age'</span>) <span class="comment"># 用tuple定义允许绑定的属性名称</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = Student() <span class="comment"># 创建新的实例</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.name = <span class="string">'Michael'</span> <span class="comment"># 绑定属性'name'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.age = <span class="number">25</span> <span class="comment"># 绑定属性'age'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.score = <span class="number">99</span> <span class="comment"># 绑定属性'score'</span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">AttributeError: <span class="string">'Student'</span> object has no attribute <span class="string">'score'</span></span><br></pre></td></tr></table></figure>
+
+<p>因为score并没有在slots里面，所以被限定绑定属性。</p>
+<h2 id="使用-property"><a href="#使用-property" class="headerlink" title="使用@property"></a>使用@property</h2><p>之前我们讨论过Python中属性和方法访问权限的问题，虽然我们不建议将属性设置为私有的，但是如果直接将属性暴露给外界也是有问题的，比如我们没有办法检查赋给属性的值是否有效。那么如果想访问属性可以通过属性的getter（访问器）和setter（修改器）方法进行对应的操作。如果要做到这点，就可以考虑使用@property包装器来包装getter和setter方法，使得对属性的访问既安全又方便。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self._birth</span><br><span class="line"></span><br><span class="line"><span class="meta">    @birth.setter</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">birth</span><span class="params">(self, value)</span>:</span></span><br><span class="line">        self._birth = value</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">age</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">2015</span> - self._birth</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>《机器学习-周志华》-绪论</title>
+    <url>/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/</url>
+    <content><![CDATA[<p><strong>基本术语</strong></p>
+<p><strong>1.属性/特征（feature）</strong>：反映事件或对象在某方面的表现或性质的事项，如西瓜的色泽，根蒂等。属性或特征的取值为特征值。</p>
+<p><strong>2.特征向量（feature vector）</strong>：假设西瓜有色泽，根蒂，敲声作为三个坐标，则它们张成一个用于描述西瓜的的三维空间，每个西瓜都可以在这个空间找到自己的位置，由于空间内的每个点对应一个坐标向量，因此把（色泽，根蒂，敲声）称为特征向量。</p>
+<p><strong>3.维数</strong>（<strong>dimensionality</strong>）：**某一个样本的特征个数。</p>
+<p><strong>4.训练数据（training data）</strong>：训练过程使用的数据，其中每一个样本成为训练样本，组成的集合成为训练集。</p>
+<p><strong>5.假设（hypothesis）：</strong>学得模型对应了关于数据的某种潜在规律。</p>
+<p><strong>6.真相（ground-truth）：</strong>这种潜在规律自身。</p>
+<p><strong>7.学习过程（training）</strong>：学习过程就是为了找出真相或者逼近真相，所得到的称为学习器或者模型。</p>
+<p><strong>8.标签（label）</strong>：就是示例的结果Y</p>
+<p><strong>9.分类（classification）：</strong>学习任务是预测离散的值Y</p>
+<p><strong>10.回归（regression）：</strong>学习任务是预测连续的值Y</p>
+<p><strong>11.监督学习（supervised）：</strong>训练数据拥有标签信息，如分类，回归</p>
+<p><strong>12.无监督学习（unsupervised）：</strong>训练数据没有标签信息，如聚类</p>
+<p><strong>13.泛化能力（generalization）</strong>：学得的模型适用于新样本的能力。具有强的泛化能力的某型能够很好的适用整个样本空间。</p>
+<p><strong>14.分布（distribution）：</strong>通常假设样本空间中全体服从一个未知的“分布”D，我们获得的每个样本都是独立的从这个分布采样获得的，即独立同分布，训练样本越多，我们得到D的信息就越多，这样就具有跟好的泛化能力。</p>
+<p><strong>假设空间</strong></p>
+<p><strong>归纳</strong>与<strong>演绎</strong>，前者从特殊到一般的泛化过程，即从具体事实归结出一般性规律，后者则是从一般到特殊的“特化”过程，即从基础原理推演出具体情况。</p>
+<p>我们可以把学习过程看做成一个在所有假设组成的空间中进行的搜索过程，搜索目标就是找到与训练集相匹配的假设。假设表示一旦确定，假设空间及其规模也就确定了。例如我们上面的例子，西瓜的色泽，根蒂，敲声为特征，那么假设空间就为</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/5.png" alt></p>
+<p>假设这三种分别为3，2，2，同时还要考虑随便一种都行，以及世界上没有好瓜的空集，那么假设空间的规模就为4<em>3</em>3+1=37.</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/1.png" alt></p>
+<p>当然搜索这个假设空间的策略有很多种，如自顶向下，自底向上等。搜索过程可以不断删掉与正例不一致的假设，与反例一致的假设。</p>
+<p><strong>版本空间</strong>：现实问题面临着很大的假设空间，但学习过程是基于有限样本训练集进行的，因此可能有多个假设与训练集一致，即存在一个与训练集一致的“假设集合”。</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/2.png" alt></p>
+<p><strong>归纳偏好</strong></p>
+<p>这可能是第一章的大坑，归纳偏好简单理解就是学习算法的结果判断必须要有一个明确的衡量方式，机器学习算法在学习过程中对某种类型假设的偏好。</p>
+<p>举个例子，比如说回归的学习图，每一个训练样本对应图中的点（x，y）要学的一个与训练集一致的模型，相当于找到一条穿过所有训练样本的曲线，显然会有多条，我们的学习算法必须有某种偏好，才能判断出“正确”的模型。</p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/3.png" alt></p>
+<p>归纳偏好可以看成学习算法自身在一个可能很庞大的假设空间中对假设进行选择的启发式或“价值观”。所以可能会有一般性的原则来引导算法确立“正确的价值观”。“<strong>奥卡姆剃刀</strong>”是一种常用的，自然科学研究中最基本的原则，即“<strong>若有多个假设与观察一致，则选择最简单的那个</strong>”。则我们会认为A比B好。当然奥卡姆剃刀也存在着问题，它本身就存在不同的诠释，如西瓜问题，到底哪种假设更“简单”。<strong>在具体问题中，这个假设是否成立，即算法的归纳偏好是否与问题本身相匹配，大多数时候直接决定了算法能否取得好的性能。</strong></p>
+<p><img src="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/4.png" alt></p>
+<p>有可能也会出现与A相比，B与训练集外的样本更一致。<strong>“没有免费的午餐”定理（</strong>NFL<strong>）：</strong>无论某一个算法多聪明，某一个算法多笨，他们的期望性能相同。NFL有一个重要的前提就是所有“问题”出现的机会相同，或所有问题同等重要。<strong>其实</strong>NFL<strong>最重要的意义在于，让我们清楚的认识到，脱离具体问题，空谈“什么学习算法更好”毫无意义。因此学习算法自身的归纳偏好与问题是否相配，起到决定性作用。</strong></p>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>机器学习</category>
+        <category>西瓜书</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>卷积神经网络（CNN）讲解</title>
+    <url>/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/</url>
+    <content><![CDATA[<p>本文主要是对于花书的第9章《卷积网络》所做的笔记，并且结合网络上相关资料，侵删。</p>
+<p><strong>卷积神经网络</strong>（Convolutional neural network，CNN）（LeCun，1989），是一种专门处理用来具有类似网格结构的数据的神经网络。例如时间序列数据（一维）或者图像数据（二维），在诸多应用领域都表现优异。卷积是一种特殊的线性运算，是指那些至少在网络的一层中使用卷积运算来代替一般的矩阵乘法运算的神经网络。</p>
+<h3 id="卷积运算"><a href="#卷积运算" class="headerlink" title="卷积运算"></a>卷积运算</h3><p>例子引入：假设我们正在用激光传感器追踪一艘宇宙飞船的位置。我们的激光传感器给出一个单独的输出x(t)，表示宇宙飞船在时刻t 的位置。x 和t 都是实值的，这意味着我们可以在任意时刻从传感器中读出飞船的位置。现在假设我们的传感器含有噪声。为了得到飞船位置的低噪声估计，我们对得到的测量结果进行平均。显然，时间上越近的测量结果越相关，所以我们采用一种加权平均的方法，对于最近的测量结果赋予更高的权值。我们可以采用一个加权函数w(a) 来实现，其中a 表示测量结果据当前时刻的时间间隔。如果我们对任意时刻都采用这种加权平均的操作，就得到了对于飞船位置的连续估计函数s：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/1.JPG" alt></p>
+<p>这种运算就叫做卷积(convolution)。卷积运算通常用星号表示：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/2.JPG" alt></p>
+<p>在卷积神经网络的术语中，第一个参数（在这个例子中，函数x）叫做<strong>输入</strong>(input)，第二个参数（函数w）叫做<strong>核函数</strong>(kernel function)。输出有时被称作<strong>特征映射</strong>（feature map）。</p>
+<p>核函数的定义：<strong>对于输入图像中的一部分区域，进行加权求和的处理，其中这个过程的权重，由一个函数定义，这个函数就是卷积核</strong></p>
+<p>在我们的例子中，连续时间是不现实的，通常采用离散时间（就是每隔几秒反馈一次），所以时间t 只能<br>取整数值。如果我们假设x 和w 都定义在整数时刻t 上，就得到了离散形式的卷积：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/3.JPG" alt></p>
+<p>在机器学习的应用中，输入通常是高维数据数组，而核也是由算法产生的高维参数数组。我们把这种高维数组叫做张量。因为输入与核的每一个元素都分开存储，我们经常假设在存储了数据的有限点集以外，这些函数的值都为零。这意味着在实际操作中，我们可以统一地把无限的求和当作对有限个数组元素的求和来用。</p>
+<p>如果把二维的图像I 作为输入，我们也相应的需要使用二维的核K：</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/4.JPG" alt></p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/5.JPG" alt></p>
+<p>上图展示了一个在二维张量上的卷积运算的例子。是不是这张图比较难以理解，我们放在动图帮助理解。</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/11.gif" alt></p>
+<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>卷积运算通过三个重要的思想来帮助改进机器学习系统：稀疏交互(sparse interactions)、参数共享(parameter sharing)、等变表示(equivariant representations)。</p>
+<h4 id="稀疏交互"><a href="#稀疏交互" class="headerlink" title="稀疏交互"></a>稀疏交互</h4><p>卷积神经网络具有稀疏交互(sparse interactions)（也叫做稀疏连接(sparse connectivity) 或者稀疏权重(sparse weights)）的特征。这通过使得核的规模远小于输入的规模来实现。</p>
+<h4 id="参数共享"><a href="#参数共享" class="headerlink" title="参数共享"></a>参数共享</h4><p>在卷积神经网络中，核的每一个元素都作用在输入的每一个位置。卷积运算中的参数共享保证了我们只需要学习一个参数集合，而不是对于每一个位置都需要学习一个单独的参数集合。</p>
+<h4 id="等变"><a href="#等变" class="headerlink" title="等变"></a>等变</h4><p>对于卷积，参数共享的特殊形式是的神经网络具有对平移等变得性质。如果一个函数满足输入改变，输出也以同样的方式改变这一性质，我们就说它是等变的。</p>
+<h3 id="池化"><a href="#池化" class="headerlink" title="池化"></a>池化</h3><p>池化函数使用某一位置的相邻输出的总体统计特征来代替网络在该位置的输出。</p>
+<p><strong>最大池化(max pooling)</strong> 函数(Zhou and Chellappa, 1988) 给出相邻矩形区域内的最大值。</p>
+<p><img src="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/8.jpg" alt></p>
+<p>其他常用的池化函数包括相邻矩形区域内的平均值、L2 范数以及依靠据中心像素距离的加权平均函数。不管采用什么样的池化函数，当输入作出少量平移时，池化能帮助我们的表示近似不变(invariant)。</p>
+<h3 id="卷积与池化作为一种无限强的先验"><a href="#卷积与池化作为一种无限强的先验" class="headerlink" title="卷积与池化作为一种无限强的先验"></a>卷积与池化作为一种无限强的先验</h3><p>先验被认为是强或者弱取决于先验中概率密度的集中程度。弱先验具有较高的熵值，例如方差很大的高斯分布，这样的先验允许数据对于参数的改变具有或多或少的自由性。强先验具有较低的熵值，例如方差很小的高斯分布，样的先验在决定参数最终取值时起着更加积极的作用。</p>
+<p>但把卷积神经网络想成具有无限强先验的全连接网络可以帮助我们更好地洞察卷积神经网络是如何工作的。其中一个关键的洞察是卷积和池化可能导致欠拟合。另一个关键洞察是当我们比较卷积模型的统计学习表现时，只能以基准中的其他卷积模型作为比较的对象。</p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>单通道</th>
+<th>多通道</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 维</td>
+<td>音频波形：卷积的轴对应于时间。我们将时间离散化并且在每个时间点测量一次波形的振幅</td>
+<td>骨架动画(skeleton animation) 数据：计算机渲染的3D 角色动画是通过随时间调整‘‘骨架’’ 的姿势而生成的。在每个时间点，角色的姿势通过骨架中的每个关节的角度来描述。我们输入到卷积模型的数据的每个通道，表示一个关节的关于一个轴的角度。</td>
+</tr>
+<tr>
+<td>2 维</td>
+<td>已经用傅立叶变换预处理的音频数据：我们可以将音频波形变换成2 维张量，不同的行对应不同的频率，不同的列对应不同的时间点。在时间轴上使用卷积使模型等效于在时间上移动。在频率轴上使用卷积使得模型等效于在频率上移动，这使得在不同八度音阶中播放的相同旋律产生相同的表示，但处于网络输出中的不同高度。</td>
+<td>彩色图像数据：其中一个通道包含红色像素，另一个包含绿色像素，最后一个包含蓝色像素。在图像的水平轴和竖直轴上移动卷积核，赋予了两个方向上平移等变性。</td>
+</tr>
+<tr>
+<td>3 维</td>
+<td>体积数据：这种数据一般来源于医学成像技术，例如CT 扫描等。</td>
+<td>彩色视频数据：其中一个轴对应着时间，另一个轴对应着视频帧的高度，最后一个对应着视频帧的宽度。</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>图卷积神经网络介绍</title>
+    <url>/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>参考资料：中国科学院计算技术研究所 沈华伟研究员课件</p>
+<p>​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件</p>
+<p>​                    <a href="https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）" target="_blank" rel="noopener">https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）</a></p>
+<h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>目前来说卷积神经网络很好的应用在了图像、音频、视频等欧式数据的分类，检测，分割，语音翻译当中，这是由于CNN的强大之处在于它能够通过局部卷积滤波器学习局部平稳结构并将其组合成多尺度分层的能力，这个就是我们经常说的<strong>平移不变性</strong>，例如，我们在图像上面识别狗，无论输入怎么平移，扭曲，最终识别出来还是狗。那么我们如何将卷积推广到非欧几里得的数据？例如，图的不规则结构对于定义图数据的卷积带来了挑战。</p>
+<p>首先，我们先来简单的理解一下卷积这个概念：卷积就是对两个函数f与g做数学运算，得到第三个函数h，分为</p>
+<p>连续情况:</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/4.JPG" alt></p>
+<p>离散情况(我们经常用在图像就是这个):<br>$$<br>ℎ(𝑥,𝑦)=(𝑓∗𝑔)(𝑥,𝑦)≝ \sum_m𝑓(𝑥−𝑚,𝑦−𝑛)𝑔(𝑚,𝑛)<br>$$</p>
+<h1 id="定义图卷积的两种方式"><a href="#定义图卷积的两种方式" class="headerlink" title="定义图卷积的两种方式"></a>定义图卷积的两种方式</h1><p><strong>两个的本质就是利用GCN提取拓扑图的特征</strong></p>
+<h3 id="空间域（顶点域）"><a href="#空间域（顶点域）" class="headerlink" title="空间域（顶点域）"></a>空间域（顶点域）</h3><p>目标顶点附近所有定点的加权平均函数，也就是直接将卷积操作定义在每个结点的连接关系上，主要挑战在于领域的大小在节点间有显著的变化，例如，幂律度分布。</p>
+<h3 id="频域（谱方法）"><a href="#频域（谱方法）" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h3><p>先通过傅里叶变换在进行卷积，例如论文《Semi-Supervised Classification with Graph Convolutional Networks》这篇文章里面有许多数学公式需要进行推导，过程为1.定义graph上的Fourier Transformation傅里叶变换（利用Spectral graph theory，借助图的拉普拉斯矩阵的特征值和特征向量研究图的性质）2.定义graph上的convolution卷积</p>
+<h2 id="频域（谱方法）-1"><a href="#频域（谱方法）-1" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h2><h3 id="Laplacian-matrix"><a href="#Laplacian-matrix" class="headerlink" title="Laplacian matrix"></a>Laplacian matrix</h3><p><strong>频域的前提条件是无向图。</strong></p>
+<p>拉普拉斯矩阵也叫拉普拉斯算子，主要应用在图论。定义为<strong>L=D-A</strong>，其中L为拉普拉斯矩阵，D为度矩阵（每个顶点的度），A为邻接矩阵。</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/2.png" alt></p>
+<p>相似度：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/3.png" alt></p>
+<p>标准化之后的拉普拉斯算子：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/5.JPG" alt></p>
+<p>其中，I是单位矩阵，标准化之后仍然是对称的。</p>
+<h3 id="图切"><a href="#图切" class="headerlink" title="图切"></a>图切</h3><p>1.对于方向图，大多数情况是最小切割和最大流量问题<br>2.对于无向图，大多数情况是：最小割问题，谱聚类</p>
+<p>理论：Maxflow-mincut定理，它指出min-cut等于max-flow，因此，图割对图论至关重要。</p>
+<h3 id="那么为什么要用拉普拉斯矩阵呢？"><a href="#那么为什么要用拉普拉斯矩阵呢？" class="headerlink" title="那么为什么要用拉普拉斯矩阵呢？"></a>那么为什么要用拉普拉斯矩阵呢？</h3><p>1.拉普拉斯是对称矩阵，可以进行谱分解（特征分解）</p>
+<p>2.由于卷积在傅里叶的频域上计算相对简单，所以为了在图上做傅里叶变换，需要找到图的连续的正交基对应傅里叶变换的基，因此要使用拉普拉斯的特征向量。</p>
+<h3 id="谱分解"><a href="#谱分解" class="headerlink" title="谱分解"></a>谱分解</h3><p>谱分解是将矩阵分解为由其特征值和特征向量表示的矩阵之积的方法，<strong>只有对可对角化矩阵或有N个线性无关的特征向量的矩阵才可以以用特征分解。</strong></p>
+<p>所以拉普拉斯矩阵一定可以谱分解，因为是半正定矩阵，并且一定是n个线性无关的特征向量的对称矩阵，对称矩阵的不同特征值对应的特征向量相互正交。</p>
+<p>所以拉普拉斯的谱分解为：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/6.JPG" alt></p>
+<p>其中U=[u<sub>1</sub>,….u<sub>n</sub>],为正交向量的集合，也由于是正交矩阵，所以<em>L</em>=<em>U</em>Λ<em>U</em><sup>−1</sup>=<em>U</em>Λ<em>U</em><sup>T</sup></p>
+<h3 id="傅里叶变换"><a href="#傅里叶变换" class="headerlink" title="傅里叶变换"></a>傅里叶变换</h3>]]></content>
+      <categories>
+        <category>人工智能</category>
+        <category>计算机视觉</category>
+        <category>深度学习</category>
       </categories>
   </entry>
 </search>

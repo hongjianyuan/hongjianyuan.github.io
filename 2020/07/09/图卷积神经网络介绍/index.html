@@ -83,12 +83,22 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="您好！">
-<meta property="og:url" content="https://hongjianyuan.github.io/archives/2020/index.html">
+<meta name="description" content="参考资料：中国科学院计算技术研究所 沈华伟研究员课件 ​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件 ​                    https:&#x2F;&#x2F;blog.csdn.net&#x2F;yyl424525&#x2F;article&#x2F;details&#x2F;100058264（这个博主写得太好了！） 背景：目前来说卷积神经网络很好的应用在了图像、音频、视">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图卷积神经网络介绍">
+<meta property="og:url" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/index.html">
 <meta property="og:site_name" content="您好！">
+<meta property="og:description" content="参考资料：中国科学院计算技术研究所 沈华伟研究员课件 ​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件 ​                    https:&#x2F;&#x2F;blog.csdn.net&#x2F;yyl424525&#x2F;article&#x2F;details&#x2F;100058264（这个博主写得太好了！） 背景：目前来说卷积神经网络很好的应用在了图像、音频、视">
+<meta property="og:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/4.JPG">
+<meta property="og:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/2.png">
+<meta property="og:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/3.png">
+<meta property="og:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/5.JPG">
+<meta property="og:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/6.JPG">
+<meta property="article:published_time" content="2020-07-09T07:15:56.000Z">
+<meta property="article:modified_time" content="2020-07-12T06:17:43.122Z">
 <meta property="article:author" content="HongJianYuan">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/4.JPG">
 
 
 
@@ -118,13 +128,13 @@
 
 
 
-  <link rel="canonical" href="https://hongjianyuan.github.io/archives/2020/"/>
+  <link rel="canonical" href="https://hongjianyuan.github.io/2020/07/09/图卷积神经网络介绍/"/>
 
 
 
 
 
-  <title>归档 | 您好！</title>
+  <title>图卷积神经网络介绍 | 您好！</title>
   
 
 
@@ -143,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -261,407 +271,305 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HongJianYuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/aa.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="您好！">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">图卷积神经网络介绍</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-09T15:15:56+08:00">
+                2020-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 10 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" itemprop="url" rel="index">
+                    <span itemprop="name">人工智能</span>
+                  </a>
+                </span>
 
-      
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机视觉</span>
+                  </a>
+                </span>
 
-        
-        
-        
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">深度学习</span>
+                  </a>
+                </span>
 
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2020">2020</h1>
-          </div>
-        
-        
 
-        
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/" itemprop="url">
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-wordcount">
               
-                <span itemprop="name">图卷积神经网络介绍</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  973字
+                </span>
               
-            </a>
-        
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-09T15:15:56+08:00"
-              content="2020-07-09" >
-          07-09
-        </time>
-      </div>
+              
+                <span class="post-meta-divider">|</span>
+              
 
-    </header>
-  </article>
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3分钟
+                </span>
+              
+            </div>
+          
 
+          
 
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/07/CGNet-A-Light-weight-Context-Guided-Network-for-Semantic-Segmentation/" itemprop="url">
-              
-                <span itemprop="name">CGNet: A Light-weight Context Guided Network for Semantic Segmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-07T09:52:49+08:00"
-              content="2020-07-07" >
-          07-07
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6/" itemprop="url">
-              
-                <span itemprop="name">python-面向对象进阶</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-06T15:43:17+08:00"
-              content="2020-07-06" >
-          07-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/06/python-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80/" itemprop="url">
-              
-                <span itemprop="name">python-面向对象编程基础</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-06T12:58:19+08:00"
-              content="2020-07-06" >
-          07-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+        <p>参考资料：中国科学院计算技术研究所 沈华伟研究员课件</p>
+<p>​                    厦门理工学院福建省模式识别与图像理解重点实验室 黄智财 工程师课件</p>
+<p>​                    <a href="https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）" target="_blank" rel="noopener">https://blog.csdn.net/yyl424525/article/details/100058264（这个博主写得太好了！）</a></p>
+<h1 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h1><p>目前来说卷积神经网络很好的应用在了图像、音频、视频等欧式数据的分类，检测，分割，语音翻译当中，这是由于CNN的强大之处在于它能够通过局部卷积滤波器学习局部平稳结构并将其组合成多尺度分层的能力，这个就是我们经常说的<strong>平移不变性</strong>，例如，我们在图像上面识别狗，无论输入怎么平移，扭曲，最终识别出来还是狗。那么我们如何将卷积推广到非欧几里得的数据？例如，图的不规则结构对于定义图数据的卷积带来了挑战。</p>
+<p>首先，我们先来简单的理解一下卷积这个概念：卷积就是对两个函数f与g做数学运算，得到第三个函数h，分为</p>
+<p>连续情况:</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/4.JPG" alt></p>
+<p>离散情况(我们经常用在图像就是这个):<br>$$<br>ℎ(𝑥,𝑦)=(𝑓∗𝑔)(𝑥,𝑦)≝ \sum_m𝑓(𝑥−𝑚,𝑦−𝑛)𝑔(𝑚,𝑛)<br>$$</p>
+<h1 id="定义图卷积的两种方式"><a href="#定义图卷积的两种方式" class="headerlink" title="定义图卷积的两种方式"></a>定义图卷积的两种方式</h1><p><strong>两个的本质就是利用GCN提取拓扑图的特征</strong></p>
+<h3 id="空间域（顶点域）"><a href="#空间域（顶点域）" class="headerlink" title="空间域（顶点域）"></a>空间域（顶点域）</h3><p>目标顶点附近所有定点的加权平均函数，也就是直接将卷积操作定义在每个结点的连接关系上，主要挑战在于领域的大小在节点间有显著的变化，例如，幂律度分布。</p>
+<h3 id="频域（谱方法）"><a href="#频域（谱方法）" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h3><p>先通过傅里叶变换在进行卷积，例如论文《Semi-Supervised Classification with Graph Convolutional Networks》这篇文章里面有许多数学公式需要进行推导，过程为1.定义graph上的Fourier Transformation傅里叶变换（利用Spectral graph theory，借助图的拉普拉斯矩阵的特征值和特征向量研究图的性质）2.定义graph上的convolution卷积</p>
+<h2 id="频域（谱方法）-1"><a href="#频域（谱方法）-1" class="headerlink" title="频域（谱方法）"></a>频域（谱方法）</h2><h3 id="Laplacian-matrix"><a href="#Laplacian-matrix" class="headerlink" title="Laplacian matrix"></a>Laplacian matrix</h3><p><strong>频域的前提条件是无向图。</strong></p>
+<p>拉普拉斯矩阵也叫拉普拉斯算子，主要应用在图论。定义为<strong>L=D-A</strong>，其中L为拉普拉斯矩阵，D为度矩阵（每个顶点的度），A为邻接矩阵。</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/2.png" alt></p>
+<p>相似度：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/3.png" alt></p>
+<p>标准化之后的拉普拉斯算子：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/5.JPG" alt></p>
+<p>其中，I是单位矩阵，标准化之后仍然是对称的。</p>
+<h3 id="图切"><a href="#图切" class="headerlink" title="图切"></a>图切</h3><p>1.对于方向图，大多数情况是最小切割和最大流量问题<br>2.对于无向图，大多数情况是：最小割问题，谱聚类</p>
+<p>理论：Maxflow-mincut定理，它指出min-cut等于max-flow，因此，图割对图论至关重要。</p>
+<h3 id="那么为什么要用拉普拉斯矩阵呢？"><a href="#那么为什么要用拉普拉斯矩阵呢？" class="headerlink" title="那么为什么要用拉普拉斯矩阵呢？"></a>那么为什么要用拉普拉斯矩阵呢？</h3><p>1.拉普拉斯是对称矩阵，可以进行谱分解（特征分解）</p>
+<p>2.由于卷积在傅里叶的频域上计算相对简单，所以为了在图上做傅里叶变换，需要找到图的连续的正交基对应傅里叶变换的基，因此要使用拉普拉斯的特征向量。</p>
+<h3 id="谱分解"><a href="#谱分解" class="headerlink" title="谱分解"></a>谱分解</h3><p>谱分解是将矩阵分解为由其特征值和特征向量表示的矩阵之积的方法，<strong>只有对可对角化矩阵或有N个线性无关的特征向量的矩阵才可以以用特征分解。</strong></p>
+<p>所以拉普拉斯矩阵一定可以谱分解，因为是半正定矩阵，并且一定是n个线性无关的特征向量的对称矩阵，对称矩阵的不同特征值对应的特征向量相互正交。</p>
+<p>所以拉普拉斯的谱分解为：</p>
+<p><img src="/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/6.JPG" alt></p>
+<p>其中U=[u<sub>1</sub>,….u<sub>n</sub>],为正交向量的集合，也由于是正交矩阵，所以<em>L</em>=<em>U</em>Λ<em>U</em><sup>−1</sup>=<em>U</em>Λ<em>U</em><sup>T</sup></p>
+<h3 id="傅里叶变换"><a href="#傅里叶变换" class="headerlink" title="傅里叶变换"></a>傅里叶变换</h3>
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/06/BiSeNet-Bilateral-Segmentation-Network-for-Real-time-Semantic-Segmentation-1/" itemprop="url">
-              
-                <span itemprop="name">BiSeNet: Bilateral Segmentation Network for Real-time Semantic Segmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-06T10:21:47+08:00"
-              content="2020-07-06" >
-          07-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/06/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E5%91%A8%E5%BF%97%E5%8D%8E%E3%80%8B-%E7%BB%AA%E8%AE%BA/" itemprop="url">
-              
-                <span itemprop="name">《机器学习-周志华》-绪论</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-06T09:09:54+08:00"
-              content="2020-07-06" >
-          07-06
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/05/A-Simple-to-Complex-Framework-for-Weakly-supervised-Semantic-Segmentation/" itemprop="url">
-              
-                <span itemprop="name">A Simple to Complex Framework for Weakly-supervised Semantic Segmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-05T09:26:56+08:00"
-              content="2020-07-05" >
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/04/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%88CNN%EF%BC%89%E8%AE%B2%E8%A7%A3/" itemprop="url">
-              
-                <span itemprop="name">卷积神经网络（CNN）讲解</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-04T21:41:22+08:00"
-              content="2020-07-04" >
-          07-04
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/03/FCN/" itemprop="url">
-              
-                <span itemprop="name">Fully Convolutional Networks for Semantic Segmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-03T14:11:03+08:00"
-              content="2020-07-03" >
-          07-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2020/07/03/Weakly-and-Semi-Supervised-Learning-of-a-DCNN-for-Semantic-Image-Segmentation/" itemprop="url">
-              
-                <span itemprop="name">Weakly- and Semi-Supervised Learning of a DCNN for Semantic Image Segmentation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2020-07-03T10:54:26+08:00"
-              content="2020-07-03" >
-          07-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>码字不易，您的支持将鼓励我继续创作，谢谢！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.JPG" alt="HongJianYuan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.JPG" alt="HongJianYuan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者：</strong>
+    HongJianYuan
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/" title="图卷积神经网络介绍">https://hongjianyuan.github.io/2020/07/09/%E5%9B%BE%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E4%BB%8B%E7%BB%8D/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>
+    本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/07/CGNet-A-Light-weight-Context-Guided-Network-for-Semantic-Segmentation/" rel="next" title="CGNet: A Light-weight Context Guided Network for Semantic Segmentation">
+                <i class="fa fa-chevron-left"></i> CGNet: A Light-weight Context Guided Network for Semantic Segmentation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -669,6 +577,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -689,8 +604,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -768,6 +692,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景："><span class="nav-number">1.</span> <span class="nav-text">背景：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定义图卷积的两种方式"><span class="nav-number">2.</span> <span class="nav-text">定义图卷积的两种方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#空间域（顶点域）"><span class="nav-number">2.0.1.</span> <span class="nav-text">空间域（顶点域）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#频域（谱方法）"><span class="nav-number">2.0.2.</span> <span class="nav-text">频域（谱方法）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#频域（谱方法）-1"><span class="nav-number">2.1.</span> <span class="nav-text">频域（谱方法）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Laplacian-matrix"><span class="nav-number">2.1.1.</span> <span class="nav-text">Laplacian matrix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图切"><span class="nav-number">2.1.2.</span> <span class="nav-text">图切</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#那么为什么要用拉普拉斯矩阵呢？"><span class="nav-number">2.1.3.</span> <span class="nav-text">那么为什么要用拉普拉斯矩阵呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#谱分解"><span class="nav-number">2.1.4.</span> <span class="nav-text">谱分解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#傅里叶变换"><span class="nav-number">2.1.5.</span> <span class="nav-text">傅里叶变换</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -954,6 +894,10 @@ setInterval("createtime()",250);
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
